@@ -1,0 +1,9 @@
+[metadata]
+title: This website - RizviR.com
+author: Rizvi Rahim
+last_updated: 2016-03-01
+written_on: 2016-02-21
+distributions: CentOS7
+url: https://github.com/rizvir/rizvir-website
+description: The code for this website. It mainly uses Python, Flask and Bootstrap. <br><br>People kept asking me why I'm writing a site manually instead of using the myriad of CMSs like Wordpress, Drupal or Blogspot. There were a lot of reasons:  <br><br>- I hated the "blog" format, and I wanted something more document oriented  <br>- I didn't want to involve any SQL databases, as it's unnecessary and makes it difficult to scale  <br>- I wanted to have my documents, which I refer to myself, in a standard format like Markdown, instead of being in a database that would make it difficult to migrate elsewhere<br>- I much preferred Python over PHP or Ruby, so that took a good suggestion, Jekyll, out of the picture <br><br>My idea was simple, I just needed to write an app to parse directories containing a Markdown file (called README.md so that I can still access my docs via github.com if my site is down) and some metadata. It'd then parse all those to give you the site you are reading now. 
+
