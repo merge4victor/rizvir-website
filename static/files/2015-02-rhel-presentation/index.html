@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>RHEL 7 - What's new</title>
+
+		<meta name="description" content="">
+		<meta name="author" content="Rizvi Rahim">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<!--<link rel="stylesheet" href="css/theme/black.css" id="theme">-->
+		<link rel="stylesheet" href="css/theme/league.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>RHEL 7</h1>
+					<h3>What's new</h3>
+					<p>
+						<small>by Rizvi Rahim, Integra Technologies</small>
+					</p>
+				</section>
+				<section>
+					<img style="background:none; border:none; box-shadow:none;" src="images/rhel-intro-slide-trans.png"/>
+				</section>
+				<section>
+					<img style="background:none; border:none; box-shadow:none;" src="images/rhel-linux-market-trans.png"/>
+				</section>
+
+				<section>
+					<h2>Enough marketing, let's get technical</h2>
+				</section>
+				<!-- Filesystem -->
+
+				<section> 
+					<section>
+						<h2>XFS is the default filesystem</h2>
+						<ul>
+							<li>No longer a paid add-on</li>
+							<li>Supports defragmentation</li>
+							<li>Much more scalable</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Supported filesystem limits</h2>
+						<table>
+							<thead>
+								<tr>
+									<th></th>
+									<th>EXT3</th>
+									<th>EXT4</th>
+									<th>XFS</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Max. single file</td>
+									<td>2TB</td>
+									<td>16TB</td>
+									<td>500TB</td>
+								</tr>
+								<tr>
+									<td>Max. filesystem</td>
+									<td>16TB</td>
+									<td>16/50TB</td>
+									<td>500TB</td>
+								</tr>
+								<tr>
+									<td>Max. subdirectories</td>
+									<td>32000</td>
+									<td>64000*</td>
+									<td>Unlimited</td>
+								</tr>
+							</tbody>
+						</table>
+					</section>
+					<section>
+						<h2>XFS caveats</h2>
+						<ul>
+							<li>Use the "<code>inode64</code>" mount option when mounting a filesystem larger than 1TB </li>
+							<li>Be aware that you cannot shrink XFS filesystems</li>
+							<li>Lots of tuning options available if you have lots of small files vs larger files</li>
+						</ul>
+					</section>
+
+				</section>
+				<section>
+					<section>
+						<h2>Systemd</h2>
+						<ul>
+							<li>Lots of controversy, but systemd is actually a Good Thing &reg;</li>
+							<li>Not something brand new introduced in RHEL7, developed for over 5 years, default since Fedora 15</li>
+							<li>Gives a much-needed modernization boost to the Linux operating system</li>
+						</ul>
+					</section>
+					<section data-transition="none">
+						<h2>Systemd advantages</h2>
+						<p>How RHEL 6 behaves with an error in the mail server configuration file:</p>
+						<img style="background:none; border:none; box-shadow:none;" src="images/screenshot-postfix-rhel6-01.png"/>
+						
+					</section>
+					<section data-transition="none">
+						<h2>Systemd advantages</h2>
+						<p>How RHEL 6 behaves with an error in the mail server configuration file:</p>
+						<img style="background:none; border:none; box-shadow:none;" src="images/screenshot-postfix-rhel6-02.png"/>
+						
+					</section>
+					<section data-transition="none">
+						<h2>Systemd advantages</h2>
+						<p>How RHEL 6 behaves with an error in the mail server configuration file:</p>
+						<img style="background:none; border:none; box-shadow:none;" src="images/screenshot-postfix-rhel6-03.png"/>
+						
+					</section>
+					<section data-transition="none">
+						<h2>Systemd advantages</h2>
+						<p>How RHEL 6 behaves with an error in the mail server configuration file:</p>
+						<img style="background:none; border:none; box-shadow:none;" src="images/screenshot-postfix-rhel6-04.png"/>
+						
+					</section>
+					<section>
+						<p>Now for RHEL 7/systemd</p>
+					</section>
+					<section data-transition="none">
+						<h2>Systemd advantages</h2>
+						<p>How RHEL 7 behaves with an error in the a mail server configuration file:</p>
+						<img style="background:none; border:none; box-shadow:none;" src="images/screenshot-postfix-rhel7-01.png"/>
+						
+					</section>
+					<section data-transition="none">
+						<h2>Systemd advantages</h2>
+						<p>How RHEL 7 behaves with an error in the a mail server configuration file:</p>
+						<img style="background:none; border:none; box-shadow:none;" src="images/screenshot-postfix-rhel7-02.png"/>
+						
+					</section>
+					<section data-transition="none">
+						<h2>Systemd advantages</h2>
+						<p>How RHEL 7 behaves with an error in the a mail server configuration file:</p>
+						<img style="background:none; border:none; box-shadow:none;" src="images/screenshot-postfix-rhel7-03.png"/>
+					</section>
+					<section>
+						<h2>Systemd advantages</h2>
+						<ul>
+							<li>Easier startup scripts</li>
+							<li>Makes cgroups easily accessible (resource prioritization or limiting)</li>
+							<li>Adds advanced features as simple configuration options, like auto-restarting services, hiding directories, etc.</li>
+							<li>Service timeouts!</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<h2>Firewalld</h2>
+					<ul>
+						<li>New firewall management tool</li>
+						<li>No service distruption when changing rules</li>
+						<li>Supports different trust zones</li>
+						<li>GUI, CLI and XML based configuration</li>
+						<li>Will make the shift to nftables in the future easier</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Firewalld</h2>
+					<pre><code data-trim contenteditable>
+# Old: iptables -A INPUT -m state --state NEW -m tcp -p tcp \ 
+# 	--dport 80 -j ACCEPT
+
+firewall-cmd --add-service=http
+
+firewall-cmd --zone=public --add-service=smtp
+
+firewall-cmd --zone=public --add-port=3667/tcp
+
+firewall-cmd --permanent --zone=public --add-rich-rule= \
+	"rule family="ipv4" source address="192.168.0.4/24" \
+	service name="http" accept"
+
+					</code></pre>
+				</section>
+				<section>
+					<h2>Docker/Containers</h2>
+					<ul>
+						<li>A new method of software packaging and development</li>
+						<li>An app distributed via a container is self contained and isolated</li>
+						<li>Easy to deploy, no worrying about OS apache/mysql/library versions</li>
+						<li>Easier to scale</li>
+						<li>No performance hit; not really virtualization</li>
+					</ul>
+				</section>
+				<section>
+					<section>
+						<h2>Other improvements</h2>
+						<ul  style="font-size: 0.75em;">
+							<li>"bash-completion" now in the base repo, so better autocomplete</li>
+							<li>NetworkManager actually usable for server use, with a command line utility</li>
+							<li>Better networking performance (supports 40G ethernet cards)</li>
+							<li>Better iSCSI target server, LIO. Supports persistent reservations.</li>
+							<li>Swap memory compression - better performance in low memory situations</li>
+
+						</ul>
+					</section>
+					<section>
+						<h2>Other improvements</h2>
+						<ul>
+							<li>Chrony handling NTP - better time accuracy</li>
+							<li>NUMA aware auto-scheduling and memory allocation</li>
+							<li>Easier Windows AD integration</li>
+							<li>Performance Co-Pilot</li>
+							<li>....and more</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<h2>Updated applications</h2>
+					<ul>
+						<li>PHP 5.4</li>
+						<li>Python 2.7.5</li>
+						<li>Apache 2.4</li>
+						<li>MariaDB 5.5</li>
+						<li>PostgreSQL 9.2</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Tech previews</h2>
+					<p class="fragment">kpatch - update kernels without rebooting</p>
+					<p class="fragment">BTRFS - next generation filesystem</p>
+					<p class="fragment">LVM caching - use SSDs to cache HDD storage</p>
+				</section>
+				<section>
+					<h2>RHEL 7 caveats</h2>
+					<ul>
+						<li>32-bit servers are not supported any more</li>
+						<li>Some older servers are no longer supported, eg. HP DL380 G6 and older</li>
+						<li>A bit of a learning curve</li>
+					</ul>
+				</section>
+				<section>
+					<img style="background:none; border:none; box-shadow:none;" src="images/rhel-timeline-trans.png"/>
+				</section>
+				<section>
+					<img style="vertical-align: middle;width: 200px; background:none; border:none; box-shadow:none;" src="images/integra.png"/>
+					&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+					<img style="vertical-align: middle;width: 200px; background:none; border:none; box-shadow:none;" src="images/rhpartner.png"/>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: false,
+				progress: true,
+				history: true,
+				center: true,
+				mouseWheel: true,
+				transitionSpeed: 'default',
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>

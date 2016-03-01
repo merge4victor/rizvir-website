@@ -1,0 +1,9 @@
+[metadata]
+title: ZLogger - Log analysis and GUI for your mail logs
+author: Rizvi Rahim
+last_updated: 2015-09-29
+written_on: 2015-01-14
+distributions: Any
+url: /static/files/screenshots/zimbralogger-draft.png
+description: A Zimbra log analysis and GUI, allowing you to search your logs and get details on emails. Work in progress.
+

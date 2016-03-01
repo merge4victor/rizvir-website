@@ -1,0 +1,212 @@
+// SASSized and modified http://purecss.io/layouts/side-menu/ inspired by the wagtail admin side menu
+
+.pure-img-responsive {
+	max-width: 100%;
+	height: auto;
+}
+
+
+// Slide in/out animation
+@mixin transition($values) {
+    -webkit-transition: $values;
+    -moz-transition: $values;
+    -ms-transition: $values;
+    -o-transition: $values;
+    transition: $values;
+}
+#layout,
+#menu,
+.menu-link {
+	@include transition(all 0.4s ease-out);
+}
+
+#layout {
+	position: relative;
+	padding-left: 0;
+	&.active {
+		#menu {
+			left: $menu-width;
+			width: $menu-width;
+		}
+		.menu-link {
+			left: $menu-width;
+		}
+	}
+}
+
+#menu {
+	margin-left: -$menu-width; 
+	width: $menu-width;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	z-index: 1000; // so the menu or its navicon stays above all content
+	background: $menu-background-color;
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
+	text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+
+	a {
+		color: $menu-text-link-color;
+		border: none;
+		padding: $menu-links-padding 0 $menu-links-padding $menu-left-padding;
+		@media (max-width: $menu-hide-when-less-than) {
+			padding: $menu-links-smallsize-padding 0 $menu-links-smallsize-padding $menu-left-padding;
+		}
+			
+	}
+
+	.pure-menu,
+	.pure-menu ul {
+		border: none;
+		background: transparent;
+	}
+
+	.pure-menu {
+		height: 100%; 
+		margin-bottom: -$menu-footer-height;
+		ul,
+		.menu-item-divided {
+			border-top: 1px solid #333;
+		}
+
+		li a:hover,
+		li a:focus {
+			background: $menu-hover-background-color;
+			@include transition(background 0.4s ease);
+			text-decoration: none;
+		}
+	}
+
+	.pure-menu-selected,
+	.pure-menu-heading {
+		background: $menu-active-background-color;
+	}
+
+	.pure-menu-selected a {
+		color: #fff;
+	}
+
+	.pure-menu-heading {
+		font-size: 110%;
+		color: #fff;
+		margin: 0;
+	}
+}
+
+// .menu-link` represents the responsive menu toggle that shows/hides on
+// small screens.	
+.menu-link {
+    position: fixed;
+    display: block; /* show this only on small screens */
+    top: 0;
+    left: 0; 
+    background: #000;
+    background: rgba(0,0,0,0.7);
+    font-size: 10px; /* change this value to increase/decrease button size */
+    z-index: 10;
+    width: 2em;
+    height: auto;
+    padding: 2.1em 1.6em;
+
+	line-height: 1em !important;
+
+	// Override bootstrap box-sizing, which breaks the mobile menu icon
+	-webkit-box-sizing: content-box; 
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
+
+	:hover,
+	:focus {
+		background: #000;
+	}
+
+	span {
+		position: relative;
+		display: block;
+	}
+
+	span,
+	span:before,
+	span:after {
+		background-color: #fff;
+		width: 100%;
+		height: 0.2em;
+	}
+
+	span:before,
+	span:after {
+		position: absolute;
+		margin-top: -0.6em;
+		content: " ";
+	}
+
+	span:after {
+		margin-top: 0.6em;
+	}
+}
+
+
+// Responsive Styles (Media Queries)
+// Hides the menu at small screens:
+@media (min-width: $menu-hide-when-less-than) {
+	.header,
+	.content {
+		padding-left: 2em;
+		padding-right: 2em;
+	}
+
+	#layout {
+		padding-left: $menu-width; /* left col width "#menu" */
+		left: 0;
+	}
+
+	#menu {
+		left: $menu-width;
+	}
+
+	.menu-link {
+		position: fixed;
+		left: $menu-width;
+		display: none;
+	}
+
+	#layout.active .menu-link {
+		left: $menu-width;
+	}
+}
+
+@media (max-width: $menu-hide-when-less-than) {
+	#layout.active {
+		position: relative;
+		left: $menu-width;
+	}
+}
+
+
+.pure-menu-item {
+	text-align: left;
+	font-size: 1.4em;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.menu-center {
+	text-align: center;
+	font-size: 1.5em;
+	font-weight: bold;
+	color: #fff;
+}
+
+#menu-footer  {
+	bottom: 0;
+	width: $menu-width;
+	height: $menu-footer-height;
+	position: absolute;
+	text-align: center;
+	margin-left: -$menu-left-padding;
+	z-index: -1000;
+}
+
+

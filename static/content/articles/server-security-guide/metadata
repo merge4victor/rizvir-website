@@ -1,0 +1,8 @@
+[metadata]
+title: Server security guide
+author: Rizvi Rahim
+last_updated: 2016-02-09
+written_on: 2012-11-27
+distributions: RHEL_6+7 CentOS_6+7
+description: These are general basic technical guidelines for securing RHEL or CentOS servers. You may want to use this as a checklist before going into production. It's not comprehensive, and only covers what I perceive to be important, esp. for LAMP setups.
+

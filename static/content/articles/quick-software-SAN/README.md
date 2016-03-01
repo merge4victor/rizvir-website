@@ -1,0 +1,151 @@
+(This document does not apply at all CentOS/RHEL 7, since the iSCSI target software changed)
+
+Not that the iSCSI target in RHEL does not support SCSI fencing properly; if you need that you are better off testing it with Openfiler instead, instructions below.
+
+
+### On the server
+
+```bash
+yum install scsi-target-utils
+
+/etc/init.d/tgtd start
+
+chkconfig --levels=35 tgtd on
+
+tgtadm --lld iscsi --op new --mode target --tid 1 --targetname iqn.2011-03.com.rizvir.main.rhcstest  # (lld = driver, op = operation, tid = target ID number)
+
+lvcreate -L 20G -n RHCS-test vg_san
+
+tgtadm --lld iscsi --op new --mode logicalunit --tid 1 --lun 1 --backing-store /dev/vg_san/RHCS-test
+
+tgtadm --lld iscsi --op bind --mode target --tid 1 -I ALL  # (allow connections from any IP)
+
+tgtadm --lld iscsi --op show --mode target  # (get info)
+
+```
+
+
+### On the client
+
+```bash
+
+yum install iscsi-initiator-utils
+
+/etc/init.d/iscsi start
+
+chkconfig --levels=35 iscsi on
+
+iscsiadm -m discovery -t sendtargets -p 10.113.0.9
+
+/etc/init.d/iscsi restart
+
+```
+
+That's all. Check /var/log/messages; you should see the new device. You can now parition (fdisk), format & mount the device.
+
+If you want to delete an old target (information is kept in /var/lib/iscsi/*) ; use the following command:
+```
+iscsiadm -m discovery -t discovery_type -p nas.gmu.int -o delete
+```
+
+If there are multiple IP addresses configured on the iSCSI device; you can manually delete the files in /var/lib/iscsi that mentions the unwanted IP address; and then restart iscsi.
+
+If you resize the LV, you need to delete & recreate the LUN:
+
+```
+tgtadm --op show --mode target
+
+tgtadm --mode logicalunit --op delete --tid=1 --lun=1
+
+tgtadm --lld iscsi --op new --mode logicalunit --tid 1 --lun 1 --backing-store /dev/vg_fedorasan/DB
+```
+
+Note that if you have two IP addresses on the server, then you'll get a target for each of them. If one of the IPs is unreachable by the client (even though it's set to DENY in the configuration), there will be a long hang/timeout.
+
+Also note if you use Windows ISCSI target you need to have samba nmb running.
+
+
+### Openfiler
+
+(Look for an alternative to Openfiler as it seems long abandoned)
+
+Install Openfiler, making sure you ONLY specify a non VG / volume (say 10GB), and the swap. Keep the rest of the space unformatted.
+
+After it installs & boots; run:
+
+```
+conary update conary
+conary updateall
+```
+
+Then reboot, and then edit /opt/openfiler/var/www/htdocs/admin/volumes_editpartitions.html, and change:
+```php
+            $start_mb = floatval((($start - 1) * ($of_disks[$disk_index]["blocksize"] / 2) * $of_disks[$disk_index]["sectors"] * $of_disks[$disk_index]["heads"]) / (1024 * 1024.0));
+            $end_mb = floatval((($end) * ($of_disks[$disk_index]["blocksize"] / 2) * $of_disks[$disk_index]["sectors"] * $of_disks[$disk_index]["heads"]) / (1024 * 1024.0)) - 1;
+```
+to
+```php
+            $start_mb = floatval((($start - 1) * ($of_disks[$disk_index]["blocksize"] / 2) * $of_disks[$disk_index]["sectors"] * $of_disks[$disk_index]["heads"]) / (1000 * 1000.0));
+            $end_mb = floatval((($end) * ($of_disks[$disk_index]["blocksize"] / 2) * $of_disks[$disk_index]["sectors"] * $of_disks[$disk_index]["heads"]) / (1000 * 1000.0)) - 1;
+```
+(thanks to the forums for this tip).
+
+Then create a volume as usual. Add the network you'd be accessing it from in the System tab. You'll need to remember to enable & start the iSCSI target service before you can configure the target. Configuration is done from the volumes tab, not the services one. Also make sure the Network ACL tab is set up right to allow connections from your IP.
+
+
+### Test Fibre channel between two QLogic HBAs
+
+Use the following to create a fibre channel target between a point-to-point connection between two QLogic HBAs: install openfiler 2.99, and run "conary update conary" and "conary updateall" and do a restart.
+
+You will need to find out the WWN of the openfiler machine, which can be found with "cat /sys/class/fc_host/hostX/port_name", and the WWN of the client machine, which can be found by pressing Control+Q during the BIOS PCI initialization, and checking the host adapter settings. In my case, the target/server was 21:00:00:e0:8b:12:70:80 and the client was 21:00:00:e0:8b:18:9b:2d.
+
+```bash
+rmmod qla2xxx
+modprobe qla2x00tgt
+scstadmin -enable_target 21:00:00:e0:8b:12:70:80 -driver qla2x00t
+scstadmin -open_dev raptor -handler vdisk_blockio -attributes filename=/dev/raptor/virt-benchmark
+scstadmin -add_group hypervisors -driver qla2x00t -target 21:00:00:e0:8b:12:70:80
+scstadmin -add_init 21:00:00:e0:8b:18:9b:2d -driver qla2x00t -target 21:00:00:e0:8b:12:70:80 -group hypervisors
+scstadmin -add_lun 0 -driver qla2x00t -target 21:00:00:e0:8b:12:70:80 -group hypervisors -device raptor
+scstadmin -write_config /etc/scst.conf
+/etc/init.d/scst stop
+/etc/init.d/scst start
+```
+
+The resultant configuration file is:
+```
+# Automatically generated by SCST Configurator v2.0.0.
+HANDLER vdisk_blockio {
+        DEVICE raptor {
+                t10_dev_id "raptor 29abe874"
+                usn 29abe874
+
+                filename /dev/raptor/virt-benchmark
+        }
+}
+
+TARGET_DRIVER qla2x00t {
+        TARGET 21:00:00:e0:8b:12:70:80 {
+                rel_tgt_id 1
+                enabled 1
+
+                LUN 0 raptor
+
+                GROUP hypervisors {
+                        LUN 0 raptor
+
+                        INITIATOR 21:00:00:e0:8b:18:9b:2d
+                }
+        }
+}
+```
+
+Now you can even do a SAN boot. Just configure your BIOS to use the Qlogic card as the first hard disk, and then in the Qlogic BIOS (control+Q), enable the adapter BIOS by selecting Configuration Settings > Adapter Settings > Host Adapter BIOS. Then from the Configuration Settings menu, select Selectable Boot Settings > Selectable Boot option -> set it to enable. Then from the (Primary) Boot field, press ENTER to select the primary boot device; you should see the Raptor (or whatever name you put) LUN visible.
+
+Then install, say, CentOS as usual (there is no need to select the specialized storage devices), you will see the LUN as just another hard drive (/dev/sda). Do the installation as you would, and make sure GRUB uses the QLogic drive by default if you have any other drives connect.
+
+
+
+
+
+

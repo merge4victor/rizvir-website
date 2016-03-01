@@ -1,0 +1,7 @@
+[metadata]
+title: Secure backups with rsnapshot
+author: Rizvi Rahim
+last_updated: 2015-08-26
+written_on: 2011-02-22
+distributions: RHEL_6+7 CentOS_6+7
+description: I have seen a lot of backup utilities over the years, both proprietary and open source, but my preferred solution is the open source rsnapshot project, preferably combined with LVM snapshots for a more consistent image. It does the actual work via rsync. rsnapshot is OK for backups, but excels in the use case of having a standby server that can (with manual intervention) take over your main server in the least amount of time. I recall a company spending days recovering data from a complete SAN failure (both controllers), but our rsnapshot based backup server got back up and running in 3 minutes once we got to the console. This even allows bare-metal recovery if you are good enough with Linux. 

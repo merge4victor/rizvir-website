@@ -1,0 +1,7 @@
+[metadata]
+title: RHEL/CentOS 6 installation guidelines
+author: Rizvi Rahim
+last_updated: 2015-07-31
+written_on: 2011-10-04
+distributions: RHEL_6 CentOS_6
+description: All of my RHEL 6/CentOS 6 installations have a signature style that my colleagues follow; you can think of it as sort of a checklist for a good production install, so that all your systems have a predictable base.

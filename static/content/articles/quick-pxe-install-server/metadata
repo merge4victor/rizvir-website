@@ -1,0 +1,8 @@
+[metadata]
+title: PXE network installation server setup
+author: Rizvi Rahim
+last_updated: 2014-06-13
+written_on: 2012-01-31
+distributions: RHEL_6 CentOS_6
+description: You really ought be using Cobbler for PXE installs, but sometimes it helps knowing exactly how things are set up and working. I sometimes having something like this either on my laptop with a cross-cable connected to a server, or on a network without needing to replace the local DHCP server with proxyDHCP.
+

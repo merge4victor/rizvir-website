@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{# Child templates needs to define: content_intro, list_header, content_type #}
+
+{% block content %}
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			{% block content_intro %}{% endblock %}
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<div class="list-group list-text-content">
+				<span class="list-group-item active">
+					<h4 class="list-group-item-heading">{% block list_header %}{% endblock %} <small>Sort by <u class="sort" id="name">Name</u> or <u class="sort" id="date">Date</u></small></h4>
+				</span>
+				{% for id,details in metadata.iteritems() %}
+				{% if details.url %} 
+					{% set url = details.url %}
+					{% set target = "_blank" %}
+				{% else %}
+					{% set url = url_for(content_type, id=id) %}
+					{% set target = "_self" %}
+				{% endif %}
+				<a href="{{url}}" target="{{target}}" class="list-group-item" data-updated="{{details.last_updated}}">
+					<h4 class="list-group-item-heading">{{ details.title }} &nbsp;&nbsp;</h4>
+					{% autoescape false %}
+					<p class="list-group-item-text">{{ details.description }} {% if details.last_updated %}<i>Last updated: {{ details.last_updated }}</i>{% endif %}</p>
+					{% endautoescape %}
+				</a>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="{{ url_for('static',filename='js/tinysort.min.js') }}"></script>
+<script>
+
+	// Sort by text on load:
+    tinysort(".list-text-content a");
+
+	// Used to keep track of current state
+	var current_sort_asc = {}
+	current_sort_asc["name"] = false;
+	current_sort_asc["date"] = false;
+
+	// Listen on sort links
+	$('.sort').click(function(event){ 
+		var type = event.target.id; //either name or date
+		if (current_sort_asc[type]){
+			order = 'asc';
+		} else {
+			order = 'desc';
+		}
+		sort_options = {order: order}
+		if (type == 'date') {
+			sort_options.data = 'updated';
+		}
+		tinysort(".list-text-content a", sort_options);
+		current_sort_asc[type] = !current_sort_asc[type];
+	});
+
+</script>
+
+
+{% endblock %}
+
+

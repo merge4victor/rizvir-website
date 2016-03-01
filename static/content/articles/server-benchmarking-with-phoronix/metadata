@@ -1,0 +1,8 @@
+[metadata]
+title: Server Benchmarking with Phoronix
+author: Rizvi Rahim
+last_updated: 2014-11-18
+written_on: 2014-11-16
+distributions: RHEL_6 CentOS_6
+description: Benchmarking is normally a tedious process, but the Phoronix test suite makes it MUCH easier. If you haven't heard of Phoronix before, this is for benchmarking system/OS speed <i>only</i>. If you need to benchmark an application or website, you'd need something else like JMeter. Phoronix would be useful in comparing different hardware, or the same hardware with different OS optimizations, comparing cloud/VPS providers, etc.
+

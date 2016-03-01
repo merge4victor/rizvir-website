@@ -1,0 +1,7 @@
+[metadata]
+title: Salt configuration management
+author: Rizvi Rahim
+last_updated: 2015-09-06
+written_on: 2015-07-28
+distributions: RHEL_6+7 CentOS_6+7
+description: This talks about setting Salt, which is a wonderful configuration management system written in Python that I find easier to work with than Puppet, and has one advantage over Ansible. There are many Salt tutorials, but this one is geared towards a more small-production setup in a way that makes it easy to add specific entries for certain hosts. It is not for designed for absolute beginners.

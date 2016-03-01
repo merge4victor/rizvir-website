@@ -1,0 +1,8 @@
+[metadata]
+title: ejabberd XMPP chat server
+author: Rizvi Rahim
+last_updated: 2015-04-29
+written_on: 2015-04-24
+distributions: RHEL_6+7 CentOS_6+7
+description: This walks through setting up ejabberd, a lightweight XMPP/chat server, on RHEL/CentOS 6 or 7, along with details on integrating it with Zimbra's authentication.
+

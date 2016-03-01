@@ -1,0 +1,9 @@
+[metadata]
+title: Upload Sievee - Job application site
+author: Rizvi Rahim
+last_updated: 2016-02-29
+written_on: 2015-05-28
+distributions: Any
+url: https://github.com/rizvir/upload-sievee
+description: Ever put up a technical job posting and be inundated with CVs from people who claim to know a lot but actually could hardly even spell what they profess to be good at? <br><br> Upload Sievee (pronounced "Upload CV") is a simple open source job application/CV uploading site, designed to sieve candidates by asking them a set of compulsory questions (which they have to answer in order to continue). It's not unduly strict, in that it allows for an unlimited amount of retries as well as feedback of which particular question was answered wrong, but each incorrect attempt is noted in the final report. <br><br> You can see a demo of the app in action by clicking on the demo link in this github page.
+

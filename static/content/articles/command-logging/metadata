@@ -1,0 +1,8 @@
+[metadata]
+title: Logging commands run on your servers
+author: Rizvi Rahim
+last_updated: 2016-01-13
+written_on: 2012-12-16
+distributions: RHEL_5+6+7 CentOS_5+6+7 Fedora
+description: This is an extremely useful tip for recording every command entered on your servers, with the (logged in) username even if they use su. One can optionally even record keystrokes on terminal/SSH sessions. This isn't really for security, but really more for keeping track of who did what, or remembering what you did a long time ago.
+

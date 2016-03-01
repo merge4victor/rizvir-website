@@ -1,0 +1,69 @@
+{%- set sidemenu = [
+	{ 'name': 'Articles', 'url' : url_for('articles'), 'icon': 'fa-file-text' },
+	{ 'name': 'Code', 'url' : url_for('code'), 'icon': 'fa-git' },
+	{ 'name': 'Photos', 'url' : url_for('photos'), 'icon': 'fa-camera' },
+	{ 'name': 'Résumé', 'url' : url_for('static', filename='files/RizviRahim_20160226.pdf'), 'icon': 'fa-file-pdf-o' },
+	{ 'name': 'Linkedin', 'url' : 'https://linkedin.com/in/rizvirahim', 'icon': 'fa-user' },
+	{ 'name': 'Contact', 'url' : url_for('contact'), 'icon': 'fa-envelope' },
+] -%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/pure-min.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+	<script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
+	
+	{% block extrahead %}
+	{% endblock %}
+
+	
+	 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"> 
+
+	<title>{% block title %}{% endblock %} - RizviR</title>
+</head>
+<body>
+	<div id="layout">
+		<!-- Menu toggle -->
+		<a href="#menu" id="menuLink" class="menu-link">
+			<!-- Hamburger icon -->
+			<span></span>
+		</a>
+
+		<div id="menu">
+			<div class="pure-menu">
+				<ul class="pure-menu-list">
+					<li><br></li>
+					<li class="pure-menu-item menu-center"><img class="img-circle" height="100px" src="{{url_for('static',filename='images/profile.jpg') }}"> </li>
+					<li><br></li>
+					<li class="pure-menu-item menu-center">RizviR</li>
+					<li><br></li>
+					{% for menuitem in sidemenu %}
+					<li class="pure-menu-item {% if menuitem.name == active_page%} pure-menu-selected{% endif %}"><a href="{{menuitem.url}}" class="pure-menu-link"><span class="fa fa-lg fa-inverse {{ menuitem.icon }}"></span>&nbsp;&nbsp; {{ menuitem.name }}</a></li>
+					{% endfor %}
+				</ul>
+			</div>
+			<div id="menu-footer">
+				<a href="https://www.python.org/" target="_blank"><img src="{{ url_for('static',filename='images/logo_bottom.png') }}"></a>
+			</div>
+		</div>
+
+		<!-- Content -->
+		{% block content %}{% endblock %}
+	</div>
+	<script src="{{ url_for('static',filename='js/modernizr.min.js') }}"></script>
+	<script src="{{ url_for('static',filename='js/bootstrap.min.js') }}"></script>
+	<script src="{{ url_for('static',filename='js/scripts.js') }}"></script>
+
+</body>
+</html>
+		
+
+
+
+

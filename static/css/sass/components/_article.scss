@@ -1,0 +1,17 @@
+// Table of contents, highlighted tab
+#toc {
+	.toc-active {
+		background: #337ab7;
+		a {
+			color: #ffffff;
+		}
+	}
+}
+
+
+// Articles, put a good amount of space before H3/H2 tags:
+.article h2,h3 {
+	margin-top: 2em;
+}
+
+

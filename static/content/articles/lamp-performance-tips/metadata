@@ -1,0 +1,7 @@
+[metadata]
+title: LAMP performance tips
+author: Rizvi Rahim
+last_updated: 2013-12-23
+written_on: 2013-12-23
+distributions: RHEL_6+7 CentOS_6+7
+description: Some general tips in speeding up Apache+MySQL+PHP websites.

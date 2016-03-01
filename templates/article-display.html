@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ metadata.title }}{% endblock %}
+
+{% block extrahead %}
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/codehilite.css') }}">
+	<script src="{{ url_for('static',filename='js/toc.min.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-1">
+			<br>
+			<a href="{{url_for('articles')}}" class="btn btn-primary"><span class="fa fa-angle-left"></span> Back to articles</a>
+		</div>
+	</div>
+	<div class="row">
+		<br>
+		<!-- Main article content -->
+		<div class="col-xs-12 col-md-9">
+			<div class="panel panel-default">
+				<div class="panel-body article">
+					<h1>{{ metadata.title }}</h1>
+					{% autoescape off %}
+					<i><p class="lead">{{ metadata.description }}</p></i>
+					{% endautoescape %}
+					<p><b>Written on:</b> {{ metadata.written_on }}</p>
+					<p><b>Last updated:</b> {{ metadata.last_updated }}</p>
+					<p><b>Distributions:</b> 
+					{% for distro in metadata.distributions.split(" ") %}
+
+						{% if distro.startswith("RHEL") %}
+							{% set label_color = "label-danger" %}
+						{% elif distro.startswith("Cent") %}
+							{% set label_color = "label-primary" %}
+						{% elif distro.startswith("Fedora") %}
+							{% set label_color = "label-info" %}
+						{% elif distro.startswith("Ubuntu") %}
+							{% set label_color = "label-warning" %}
+						{% elif distro.startswith("SLES") %}
+							{% set label_color = "label-success" %}
+						{% else %}
+							{% set label_color = "label-default" %}
+						{% endif %}
+
+						<span class="label {{ label_color }}">{{distro}}</span>
+					{% endfor %}
+					</p>
+					<br/>
+					{{ content }}
+				</div>
+			</div>
+		</div>
+
+		<!-- Sidebar -->
+		<div class="col-md-3 hidden-xs">
+			<div class="panel panel-default" style="position: fixed; max-height: 90%; overflow: auto;"> 
+			{#<div class="panel panel-default">#}
+				<div class="panel-heading">Table of contents</div>
+				<div class="panel-body">
+					<div id="toc"></div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+{# Add empty space to make the last TOC link activate #}
+{% for i in range(1,50) %}
+	<br />
+{% endfor %}
+<script>
+	// Generate TOC
+	$('#toc').toc();
+
+	// Make all images in the article responsive
+	$(".article img").addClass("img-responsive");
+</script>
+
+
+
+{% endblock %}
+
+

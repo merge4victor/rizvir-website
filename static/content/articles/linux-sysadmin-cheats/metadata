@@ -1,0 +1,8 @@
+[metadata]
+title: Linux sysadmin cheats
+author: Rizvi Rahim
+last_updated: 2016-01-13
+written_on: 2011-02-22
+distributions: RHEL_6+7 CentOS_6+7
+description: This is a collection of Linux commands that I refer back to when I need them, though it's helpful knowing many of these off by heart.
+

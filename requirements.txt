@@ -1,0 +1,4 @@
+Flask==0.10.1
+Markdown==2.6.5
+Pygments==2.1.1
+Frozen-Flask==0.12

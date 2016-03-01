@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Photos{% endblock %}
+{% set active_page = "Photos" %}
+
+{% block content %}
+
+<div class="grid">
+	<div class="grid-sizer"></div>
+
+	{% for number,photo in photos %}
+		{# We want to make the first photo big  grid-item--width2 #}
+		<div class="grid-item{% if number == 0 %} grid-item--width2{% endif %}">
+			<a href="{{url_for('static', filename=photo_relative_path+'/'+photo)}}">
+				<img src="{{url_for('static', filename=photo_thumbnails_relative_path+'/'+photo)}}" />
+			</a>
+		</div>
+	{% endfor %}
+</div>
+
+<script src="{{ url_for('static',filename='js/masonry.pkgd.min.js') }}"></script>
+<script src="{{ url_for('static',filename='js/imagesloaded.pkgd.min.js') }}"></script>
+<script>
+var $grid = $('.grid').masonry({
+	itemSelector: '.grid-item',
+	columnWidth: '.grid-sizer',
+	percentPosition: true,
+
+});
+
+// layout Masonry after each image loads
+$grid.imagesLoaded().progress( function() {
+	console.log("Loaded!");
+	$grid.masonry('layout');
+});
+
+
+</script>
+
+{% endblock %}
+
+
+

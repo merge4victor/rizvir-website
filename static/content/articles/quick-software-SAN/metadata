@@ -1,0 +1,9 @@
+[metadata]
+title: Quick software SAN setup for testing
+author: Rizvi Rahim
+last_updated: 2013-10-03
+written_on: 2011-03-06
+distributions: RHEL_6 CentOS_6
+description: When testing clustering techniques, it's almost mandatory to have a SAN setup unless you're using DRBD. This is how you can have a quick software SAN setup on EL6 which can support a clustered filesysytem for testing. This is not even close to ready for production use.
+
+
