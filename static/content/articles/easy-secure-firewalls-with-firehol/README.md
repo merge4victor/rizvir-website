@@ -40,7 +40,7 @@ interface eth0 wan
 
 ```
 
-Let a list of services that firehol understand from [here](https://firehol.org/services/).	
+Get a list of services that firehol understand from [here](https://firehol.org/services/).	
 
 If you only need to worry about IPv4, you can use "version 5". Otherwise, if you want IPv6 support, use "version 6" and [read this](https://firehol.org/tutorial/firehol-ipv6/).
 
