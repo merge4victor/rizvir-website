@@ -5,6 +5,11 @@
 @import 'components/article';
 @import 'components/photos';
 
-
+// Override bootstrap bright blue header:
+.list-group-item.active,
+.list-group-item.active:hover {
+	background-color: #4A5767;
+	border-color: #717171;
+}   
 
 
