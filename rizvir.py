@@ -2,10 +2,13 @@ from __future__ import print_function
 from flask import Flask, url_for, render_template, Markup, send_from_directory, redirect, request
 import os
 import sys
+from urlparse import urljoin
 import ConfigParser
 import markdown
 
 app = Flask(__name__)
+
+CANONICAL_DOMAIN="https://rizvir.com"
 
 CURRENT_PATH = os.path.abspath(os.path.dirname(__file__))
 CONTENT_PATH = os.path.join(CURRENT_PATH, 'static/content')
@@ -87,6 +90,8 @@ def article(id):
 	return render_template('article-display.html', 
 		content = content, 
 		metadata = content_metadata['articles'][id], 
+		url = urljoin(CANONICAL_DOMAIN, '/articles/{id}/'.format(id=id)),
+		id = id
 	)
 
 
