@@ -131,6 +131,7 @@ def contact():
 
 # Static files
 @app.route('/robots.txt')
+@app.route('/favicon.ico')
 def static_files():
 	return send_from_directory(app.static_folder, request.path[1:])
 
