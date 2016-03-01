@@ -1,0 +1,9 @@
+[metadata]
+title: System benchmark: HP DL380 G4 to G9 comparison with AWS
+author: Rizvi Rahim
+last_updated: 2015-10-03
+written_on: 2015-03-06
+distributions: CentOS_6
+url: http://openbenchmarking.org/result/1603018-RIZV-HPDL38004
+description: The HP Generations benchmark, compared with AWS instances (us.east).
+

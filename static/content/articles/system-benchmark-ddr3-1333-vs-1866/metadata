@@ -1,0 +1,9 @@
+[metadata]
+title: System benchmark: DDR3 1333 MHz vs 1866 MHz
+author: Rizvi Rahim
+last_updated: 2015-02-20
+written_on: 2015-02-20
+distributions: CentOS_6
+url: http://openbenchmarking.org/result/1603019-RIZV-DDR313304
+description: A benchmark to see if spending the extra dough on 1866MHz DDR3 CL9 RAM sticks makes any noticable difference to the OS performance vs. cheaper 1333 MHz CL9 ones .
+

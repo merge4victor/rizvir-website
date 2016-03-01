@@ -1,0 +1,9 @@
+[metadata]
+title: System benchmark: HP DL380 G4 to G9 comparison
+author: Rizvi Rahim
+last_updated: 2015-09-14
+written_on: 2015-03-06
+distributions: CentOS_6
+url: http://openbenchmarking.org/result/1603011-RIZV-HPDL38026
+description: A benchmark comparing different generations of HP DL380 servers, starting from the G4, all the way to Gen9, with my desktop thrown in as well.
+
