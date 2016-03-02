@@ -128,6 +128,11 @@ def photos():
 def contact():
 	return render_template('contact.html')
 
+# 404 page
+@app.route('/404/')
+def not_found():
+	return render_template('404.html')
+
 
 # Static files
 @app.route('/robots.txt')
