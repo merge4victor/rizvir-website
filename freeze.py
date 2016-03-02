@@ -17,6 +17,11 @@ def article_content():
 				continue
 			yield {'id': articleid, 'content': filename }
 
+@freezer.register_generator
+def static_files():
+	for file in ['robots.txt', 'favicon.ico']:
+		yield '/{file}'.format(file=file)
+
 if __name__ == '__main__':
 	freezer.freeze()
 	#freezer.run(debug=True)
