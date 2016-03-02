@@ -152,6 +152,9 @@
   font-size: 1.5em;
   font-weight: bold;
   color: #fff; }
+  @media (max-width: 768px) {
+    .menu-center {
+      margin-top: -0.8em; } }
 
 #menu-footer {
   bottom: 0;
