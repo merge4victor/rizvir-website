@@ -145,7 +145,7 @@
 .pure-menu-item {
   text-align: left;
   font-size: 1.4em;
-  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; }
+  font-family: "Montserrat", "Helvetica Neue",Helvetica,Arial,sans-serif; }
 
 .menu-center {
   text-align: center;
@@ -210,5 +210,11 @@
 .list-group-item.active:hover {
   background-color: #4A5767;
   border-color: #717171; }
+
+h1, h2, h3, h4, h5, h6, p {
+  font-family: 'Lato','Helvetica Neue',Helvetica,Arial,sans-serif; }
+
+p {
+  font-size: 1.1em; }
 
 /*# sourceMappingURL=styles.css.map */
