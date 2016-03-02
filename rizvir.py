@@ -1,5 +1,7 @@
 from __future__ import print_function
 from flask import Flask, url_for, render_template, Markup, send_from_directory, redirect, request
+from werkzeug.contrib.atom import AtomFeed
+from datetime import datetime, timedelta
 import os
 import sys
 from urlparse import urljoin
@@ -123,16 +125,42 @@ def photos():
 		photo_relative_path=photo_relative_path, 
 		photo_thumbnails_relative_path=photo_thumbnails_relative_path)
 
+
 # Contact page
 @app.route('/contact/')
 def contact():
 	return render_template('contact.html')
+
 
 # 404 page
 @app.route('/404/')
 def not_found():
 	return render_template('404.html')
 
+# Atom feed
+@app.route('/atom.xml')
+def atom_feed():
+	feed = AtomFeed('RizviR - Articles',
+		feed_url=request.url, url=request.url_root, 
+		icon=url_for('static', filename='favicon.ico'))
+	for id,metadata in content_metadata['articles'].iteritems():
+		title = metadata['title'];
+		summary = metadata['description']
+		url = urljoin(CANONICAL_DOMAIN, '/articles/{id}/'.format(id=id))
+		updated = datetime.strptime(metadata['last_updated'], '%Y-%m-%d')
+		published = datetime.strptime(metadata['written_on'], '%Y-%m-%d')
+		author = metadata['author']
+
+		# Only publish articles less than around 4 months old
+		months = 4
+		oldest_allowed = datetime.now() - timedelta(days=months*30)
+		if updated < oldest_allowed:
+			continue
+
+		feed.add(title=title, summary=summary, summary_type='text', url=url,
+			updated=updated, author=author, published=published)
+		
+	return feed.get_response()
 
 # Static files
 @app.route('/robots.txt')

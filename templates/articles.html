@@ -4,9 +4,14 @@
 
 {% block title %}Articles{% endblock %}
 
+{% block extrahead %}
+	<link href="{{ url_for('atom_feed') }}" rel="alternate" title="Recent Articles at RizviR" type="application/atom+xml"/>
+{% endblock %}
+
 {% block content_intro %}
 	<h2>Articles</h2>
 	<p>These are Linux related articles I've written for my own reference which might be useful for others with similar interests. All of the articles here are mainly focused on Red Hat Enterprise Linux/CentOS unless otherwise stated in the title.</p>
+	<p>If you want to keep track of new articles I write, you can point your RSS reader to this page, it should automaticaly pick up the Atom feed. I recommend the <a href="https://play.google.com/store/apps/details?id=net.etuldan.sparss&hl=en">spaRSS</a> app if you have an Android device. &nbsp; <a href="{{url_for('atom_feed')}}"><span class="label label-warning"><span class="fa fa-rss"><span></span></p></a>
 {% endblock %}
 
 {% block list_header %}Documents{% endblock %}
