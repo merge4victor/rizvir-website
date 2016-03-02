@@ -40,16 +40,18 @@
 
 		<div id="menu">
 			<div class="pure-menu">
-				<ul class="pure-menu-list">
-					<li><br></li>
-					<a href="{{ url_for('index') }}"><li class="pure-menu-item menu-center"><img class="img-circle" height="100px" src="{{url_for('static',filename='images/profile.jpg') }}"> </li></a>
-					<li><br></li>
-					<li class="pure-menu-item menu-center">RizviR</li>
-					<li><br></li>
-					{% for menuitem in sidemenu %}
-					<li class="pure-menu-item {% if menuitem.name == active_page%} pure-menu-selected{% endif %}"><a href="{{menuitem.url}}" class="pure-menu-link"><span class="fa fa-lg fa-inverse {{ menuitem.icon }}"></span>&nbsp;&nbsp; {{ menuitem.name }}</a></li>
-					{% endfor %}
-				</ul>
+				<nav>
+					<ul class="pure-menu-list">
+						<li><br></li>
+						<a href="{{ url_for('index') }}"><li class="pure-menu-item menu-center"><img class="img-circle" height="100px" src="{{url_for('static',filename='images/profile.jpg') }}"> </li></a>
+						<li><br></li>
+						<li class="pure-menu-item menu-center">RizviR</li>
+						<li><br></li>
+						{% for menuitem in sidemenu %}
+						<li class="pure-menu-item {% if menuitem.name == active_page%} pure-menu-selected{% endif %}"><a href="{{menuitem.url}}" class="pure-menu-link"><span class="fa fa-lg fa-inverse {{ menuitem.icon }}"></span>&nbsp;&nbsp; {{ menuitem.name }}</a></li>
+						{% endfor %}
+					</ul>
+				</nav>
 			</div>
 			<div id="menu-footer">
 				<a href="https://www.python.org/" target="_blank"><img src="{{ url_for('static',filename='images/logo_bottom.png') }}"></a>
