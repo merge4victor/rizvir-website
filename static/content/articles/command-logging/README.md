@@ -31,7 +31,7 @@ You can also use both methods together.
  
 ### Command Logging
 
-Thanks to my ex-colleague, [Khizer Naeem](blog.kxr.me) for coming up with this.
+Thanks to my ex-colleague, [Khizer Naeem](http://blog.kxr.me) for coming up with this.
 
 Optionally, for accountability, it's best if each admin has their own username, and that you disable root logins.
 
