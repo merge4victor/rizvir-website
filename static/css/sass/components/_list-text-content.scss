@@ -2,10 +2,20 @@
 
 .list-group-item:not(.active) h4 {
 	padding-top: $text-list-vertical-spacing;
+	// Make the heading stand out by making it darker:
+	color: #000000;
 }
 
 .list-group-item-text {
 	padding-bottom: $text-list-vertical-spacing;
 }
 
+// Sort by name/date should have a pointy cursor
+.sort {
+	cursor: pointer;
+}
 
+// Lighten the "Last updated" bit
+.last_updated {
+	color: #AEAEAE;
+}
