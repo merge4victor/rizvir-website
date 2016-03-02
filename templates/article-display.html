@@ -25,7 +25,7 @@
 				<div class="panel-body article">
 					<h1>{{ metadata.title }}</h1>
 					{% autoescape off %}
-					<i><p class="lead">{{ metadata.description }}</p></i>
+					<p class="lead"><i>{{ metadata.description }}</i></p>
 					{% endautoescape %}
 					<p><b>Written on:</b> {{ metadata.written_on }}</p>
 					<p><b>Last updated:</b> {{ metadata.last_updated }}</p>
