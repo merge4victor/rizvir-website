@@ -4,6 +4,6 @@ author: Rizvi Rahim
 last_updated: 2015-09-24
 written_on: 2012-04-25
 distributions: RHEL_6+7 CentOS_6+7 
-description: Imagine if allowing incoming FTP connections to your ftp server with iptables was as easy as having a file containing the line <tt>server ftp accept</tt>. Or if only allowing outgoing HTTP access by Apache to just your LAN just needed a line saying <tt>client http accept user apache dst 10.1.2.0/24</tt>. Or imagine if you could just preview your firewall rules for 30 seconds before commiting them, saving yourself from being locked out with a bad rule? Stop dreaming, and start installing FireHOL on your servers.
+description: Imagine if allowing incoming FTP connections to your ftp server with iptables was as easy as having a file containing the line "server ftp accept". Or if only allowing outgoing HTTP access by Apache to just your LAN just needed a line saying "client http accept user apache dst 10.1.2.0/24". Or imagine if you could just preview your firewall rules for 30 seconds before commiting them, saving yourself from being locked out with a bad rule? Stop dreaming, and start installing FireHOL on your servers.
 
 
