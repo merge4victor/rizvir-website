@@ -163,10 +163,17 @@
   z-index: -1000; }
 
 .list-group-item:not(.active) h4 {
-  padding-top: 7px; }
+  padding-top: 7px;
+  color: #000000; }
 
 .list-group-item-text {
   padding-bottom: 7px; }
+
+.sort {
+  cursor: pointer; }
+
+.last_updated {
+  color: #AEAEAE; }
 
 #toc .toc-active {
   background: #337ab7; }
