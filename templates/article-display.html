@@ -3,6 +3,8 @@
 {% block title %}{{ metadata.title }}{% endblock %}
 
 {% block extrahead %}
+	<meta name="description" content="{{ metadata.description }}">
+
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/codehilite.css') }}">
 	<script src="{{ url_for('static',filename='js/toc.min.js') }}"></script>
 {% endblock %}
