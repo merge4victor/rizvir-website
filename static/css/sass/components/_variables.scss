@@ -9,3 +9,13 @@ $menu-left-padding: 20px;
 $menu-hide-when-less-than: 768px;
 $menu-footer-height: 50px;
 
+$text-list-vertical-spacing: 7px;
+
+@mixin transition($values) {
+    -webkit-transition: $values;
+    -moz-transition: $values;
+    -ms-transition: $values;
+    -o-transition: $values;
+    transition: $values;
+}
+

@@ -162,13 +162,11 @@
   margin-left: -20px;
   z-index: -1000; }
 
-.list-text-content a {
-  text-decoration: none;
-  color: #333333; }
-.list-text-content u {
-  cursor: pointer; }
-.list-text-content li:hover {
-  background-color: #f6f6f6; }
+.list-group-item:not(.active) h4 {
+  padding-top: 7px; }
+
+.list-group-item-text {
+  padding-bottom: 7px; }
 
 #toc .toc-active {
   background: #337ab7; }
