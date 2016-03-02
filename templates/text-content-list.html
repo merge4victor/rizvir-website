@@ -14,7 +14,7 @@
 		<div class="col-md-12">
 			<div class="list-group list-text-content">
 				<span class="list-group-item active">
-					<h4 class="list-group-item-heading">{% block list_header %}{% endblock %} <small>Sort by <u class="sort" id="name">Name</u> or <u class="sort" id="date">Date</u></small></h4>
+					<h4 class="list-group-item-heading">{% block list_header %}{% endblock %} <small>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sort by <u class="sort" id="name">Name</u> or <u class="sort" id="date">Date</u></small></h4>
 				</span>
 				{% for id,details in metadata.iteritems() %}
 				{% if details.url %} 
@@ -27,7 +27,7 @@
 				<a href="{{url}}" target="{{target}}" class="list-group-item" data-updated="{{details.last_updated}}">
 					<h4 class="list-group-item-heading">{{ details.title }} &nbsp;&nbsp;</h4>
 					{% autoescape false %}
-					<p class="list-group-item-text">{{ details.description }} {% if details.last_updated %}<i>Last updated: {{ details.last_updated }}</i>{% endif %}</p>
+					<p class="list-group-item-text">{{ details.description }} {% if details.last_updated %}<i class="last_updated">Last updated: {{ details.last_updated }}</i>{% endif %}</p>
 					{% endautoescape %}
 				</a>
 				{% endfor %}
