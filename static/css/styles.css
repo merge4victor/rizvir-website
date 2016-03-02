@@ -152,6 +152,8 @@
   font-size: 1.5em;
   font-weight: bold;
   color: #fff; }
+  .menu-center img {
+    margin-top: -0.8em; }
   @media (max-width: 768px) {
     .menu-center {
       margin-top: -0.8em; } }
@@ -178,6 +180,9 @@
 .last_updated {
   color: #AEAEAE; }
 
+@media (max-width: 768px) {
+  .mobile_padding {
+    padding-top: 25px; } }
 #toc .toc-active {
   background: #337ab7; }
   #toc .toc-active a {

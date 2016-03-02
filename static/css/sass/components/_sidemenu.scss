@@ -190,6 +190,9 @@
 	font-size: 1.5em;
 	font-weight: bold;
 	color: #fff;
+	img {
+		margin-top: -$menu-links-padding;
+	}
 	@media (max-width: $menu-hide-when-less-than) {
 		margin-top: -$menu-links-padding;
 	}

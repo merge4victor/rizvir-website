@@ -1,7 +1,7 @@
-// Increase the list readability by adding spacing before and after
-
 .list-group-item:not(.active) h4 {
+	// Increase the list readability by adding spacing before and after:
 	padding-top: $text-list-vertical-spacing;
+
 	// Make the heading stand out by making it darker:
 	color: #000000;
 }
@@ -18,4 +18,13 @@
 // Lighten the "Last updated" bit
 .last_updated {
 	color: #AEAEAE;
+}
+
+
+// Add a spacing in the top when seen on a mobile
+// so that the burger box doesn't overlap with the title
+@media (max-width: $menu-hide-when-less-than) {
+	.mobile_padding {
+		padding-top: 25px;
+	}
 }
