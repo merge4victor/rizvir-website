@@ -11,6 +11,7 @@ import markdown
 app = Flask(__name__)
 
 CANONICAL_DOMAIN="https://rizvir.com"
+ATOM_FEED="/atom.xml"
 
 CURRENT_PATH = os.path.abspath(os.path.dirname(__file__))
 CONTENT_PATH = os.path.join(CURRENT_PATH, 'static/content')
@@ -138,10 +139,10 @@ def not_found():
 	return render_template('404.html')
 
 # Atom feed
-@app.route('/atom.xml')
+@app.route(ATOM_FEED)
 def atom_feed():
 	feed = AtomFeed('RizviR - Articles',
-		feed_url=request.url, url=request.url_root, 
+		feed_url=urljoin(CANONICAL_DOMAIN, ATOM_FEED), url=CANONICAL_DOMAIN, 
 		icon=url_for('static', filename='favicon.ico'))
 	for id,metadata in content_metadata['articles'].iteritems():
 		title = metadata['title'];
