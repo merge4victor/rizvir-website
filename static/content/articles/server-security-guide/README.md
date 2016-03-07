@@ -1,4 +1,4 @@
-* Follow the standard installation guidelines for [RHEL6](/articles/el6-standard-installation/) or [RHEL7](/articles/el6-standard-installation/), but have a separate /tmp at least.
+* Follow the standard installation guidelines for [RHEL6](/articles/el6-standard-installation/) or [RHEL7](/articles/el7-standard-installation/), but have a separate /tmp at least.
 
 * If this is a virtual machine, and you made it from a template, be sure you re-generate the SSH host keys (run rm -vf /etc/ssh/ssh_host_* and restart SSH), and make sure none of the users have any "authorized_keys" files lying around in their .ssh directories. Ideally your templates shouldn't have this in the first place, but it's best to double check, esp. if you are using some [cloud providers](http://www.theregister.co.uk/2016/02/09/linode_ssh_security/). 
 
