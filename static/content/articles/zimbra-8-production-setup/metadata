@@ -1,0 +1,8 @@
+[metadata]
+title: Zimbra 8.x production setup
+author: Rizvi Rahim
+last_updated: 2015-09-02
+written_on: 2014-11-07
+distributions: RHEL_6+7 CentOS_6+7
+description: Some steps in setting up a Zimbra 8 server for a production internet-facing server. This is not a tutorial, and is designed for those who already have a familiarity with setting up Zimbra.
+
