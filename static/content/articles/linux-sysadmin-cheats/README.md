@@ -22,6 +22,135 @@ iptables -t nat -A POSTROUTING -j MASQUERADE
 ### Find parent PID
 `ps -o user,pid,ppid,command -ax`
 
+### Server stuck in TIME_WAIT all the time?
+
+```
+net.ipv4.tcp_fin_timeout=15
+net.ipv4.tcp_tw_reuse=1
+net.ipv4.tcp_tw_recycle=1
+```
+
+### Generate heat
+`for cpu in 1 2 3 4 5 6 7 8; do ( while true; do true; done ) & done`
+ 
+### MySQL stuff
+MySQL database sizes (CPU intensive, prefer starting off your MySQL installations with innodb_file_per_table)
+`SELECT @schema := table_schema,  SUM(data_length+index_length)/1024/1024 AS total_mb FROM information_schema.tables GROUP BY table_schema ORDER BY 2;`
+
+MySQL table sizes:
+`SHOW TABLE STATUS order by 'Data_length';`
+
+MySQL which tables using InnoDB:
+`SELECT table_schema, table_name FROM INFORMATION_SCHEMA.TABLES WHERE engine = 'innodb';`
+
+MySQL kill thead:
+`SHOW PROCESSLIST;`
+`KILL 27;`
+
+Reset MySQL root password (from redhat docs)
+service mysqld stop
+/usr/bin/mysqld_safe --skip-grant-tables &
+mysql -u root mysql
+mysql> UPDATE user SET Password=PASSWORD('new_password') WHERE user='root';
+mysql> FLUSH PRIVILEGES;
+mysql> exit;
+mysqladmin -u root -pnew_password shutdown
+service mysqld start
+ 
+### Scan for new LUNs without rebooting
+
+Instead of doing it manually...
+```
+echo "1" > /sys/class/fc_host/host/issue_lip
+# For every hostN:
+echo "- - -"  >  /sys/class/fc_host/hostX/device/scsi_host/hostX/scan #Fibre
+echo "- - -" > /sys/class/scsi_host/hostX/scan
+``` 
+...just `yum install sg3_utils` and run `rescan-scsi-bus.sh`.
+
+
+### RPM tips
+- Which RPM a file belongs to: `rpm -qf /etc/rsyslog.conf`
+- View RPM contents: `rpm -q --filesbypkg -p fiklename.rpm`
+- Unzip an RPM: `rpm2cpio bash-123.rpm | cpio -idmv`
+- List all files an installed package: `rpm -ql rsyslog`
+- List all files in an RPM: `rpm -qlp someapp.rpm`
+Note that you can't guess the effect an RPM can have on a system just based on it's files; you need to also find out the scripts it'd execute during the installation: `rpm -qp --scripts someapp.rpm` or as a trigger: `rpm -qp --triggers someapp.rpm`. If you don't like the look of the script, but you can still install an RPM bypassing the scripts with `rpm --noscripts -ivh someapps.rpm`
+- List all config file: `rpm -qc rsyslog`
+- List dependencies of an installed package: `rpm -qR bash`
+- List dependencies of an RPM: `rpm -qRp someapp.rpm`
+- Show info of an installed package: `rpm -qi screen`
+- Show info of an RPM: `rpm -qip someapp.rpm`
+- Verify GPG key (assuming you did an rpm --import): `rpm -K someapp.rpm`
+- Check if a file has been tampered: `rpm -Vf /usr/bin/bash`  or `rpm -V bash`
+- Check all files (very slow, prone to false positives): `rpm -Va`
+ 
+### yum-security (RHEL only, not CentOS)
+- Summary of the number of security and bugfix updates: `yum updateinfo`
+- List of advisories with the packages affected: `yum updateinfo list`
+- Details of a Red Hat advisory: `yum updateinfo RHSA-2014:1293`
+- List all the updates needed to resolve a CVE: `yum updateinfo list --cve=CVE-2013-0775 `
+- List of security related updates: `yum --security list updates`
+- Huge ass list of all security update details: `yum info-sec`
+- Update security related packages only: `yum --security update`
+Note that doing a `yum --security update` would update an affected package to the latest one available in the repositories. As an example, say you have deo-1.3 installed, and there is a security vulnerability fixed in deo-1.4, and a bug fixed in deo-1.5, and a feature added in deo-1.6. A `yum --security update deo` would push your deo from 1.3 to 1.6. If, instead, you want to update to just the amount required to fix a bug, use update-minimal, which would update deo to 1.4 only:
+`yum update-minimal --security`
+- Update packages that fix a bugzilla ID: `yum --bz 1011219 update`
+- Update packages related to a Red Hat advisory: `yum update --advisory=RHSA-2014:0159`
+- Update only critical packages (not documented in the man page or red hat docs): `yum update --security --sec-severity=Critical`
+- Update only important packages (not documented in the man page or red hat docs): `yum update --security --sec-severity=Important`
+
+
+### Which processes are responsible for the load:
+Very few people I've met, even some those working in Red Hat support, realize how the load is calculated, with many thinking it's only based on the CPU usage, and some understanding that disk access is involved too somehow but aren't sure how the numbers work. Simplified, the load is just the average number of processes that are in a running (=CPU intensive), or uninterrupted sleep (=Waiting for I/O) state. So if you run this command several times:
+`ps -eo stat,pid,ppid,size,pcpu,user,args | grep '^D\|^R'`
+you can see that the number of processes excluding the ps process represents the load on the system, with 'R' meaning it's using up the CPU, and 'D' probably meaning it's using your disk, though in cases like a stuck NFS or GFS2 mountpoint, just mean that it's stuck in an uninterruptable sleep waiting for I/O. 
+ 
+ 
+### Hard soft-reboot a server having IO issues
+It's rare, and I don't know why it happened to me this often, but there are situations where you happen to have a terminal open on a very old test server, and it's RAID controller or I/O completely freezes up which could be fixed by a reboot, but you can't type it reboot or shutdown because that would need to read the disk to find those binaries. So to save you the trouble of accessing the IPMI, you could use this, which doesn't need to read the disk, to reboot:
+```
+echo 1 > /proc/sys/kernel/sysrq
+echo b > /proc/sysrq-trigger
+```
+ 
+### Hang/freeze a system
+This is extremely useful, or even crucial, in cluster testing to simulate OS or system freezes
+`# echo c > /proc/sysrq-trigger # Freeze system`
+
+ 
+### UNIX timestamps to normal time & back
+```
+date -d @1338636201
+date --date="Wed Aug 22 07:51:04 UTC 2007" +%s
+```
+
+
+### Encrypted block device
+`cryptsetup --verbose --verify-passphrase luksFormat /dev/vg_rhel6/LogEncrypted`
+`cryptsetup luksOpen /dev/vg_rhel6/LogEncrypted encrypted_stuff`
+`mkfs.ext4 -m 0 /dev/mapper/encrypted_stuff`
+**/etc/crypttab**
+```
+		encrypted_stuff /dev/vg_rhel6/LogEncrypted none
+```
+/etc/fstab:
+```
+		/dev/mapper/encrypted_stuff /mnt/encrypted      ext4    defaults        0 0
+```
+`cryptsetup luksClose encrypted_stuff`
+ 
+### Rebuild initrd:
+
+RHEL 5: `cd /boot; mv initrd-2.6.18-238.5.1.el5.img initrd-2.6.18-238.5.1.el5.img.orig ; mkinitrd -f /boot/initrd-$(uname -r).img $(uname -r)`
+RHEL 6: `dracut -f /boot/initramfs-$(uname -r).img $(uname -r)`
+
+### Find the original MD5sum of a binary that was prelinked:
+`prelink -y --md5 /usr/bin/cifsiostat`
+ 
+### Speed up ext3/ext4 filesystem at the expense of safety:
+FS Mount options: `defaults,noatime,data=writeback,barrier=0,nobh`
+ 
 ### New pc with old kernel boot options
 `linux pci=nommconf noapic acpi=off`
 
@@ -237,135 +366,6 @@ Cache might still be involved.
 `openssl speed`
 
 
-### Server stuck in TIME_WAIT all the time?
-
-```
-net.ipv4.tcp_fin_timeout=15
-net.ipv4.tcp_tw_reuse=1
-net.ipv4.tcp_tw_recycle=1
-```
-
-### Generate heat
-`for cpu in 1 2 3 4 5 6 7 8; do ( while true; do true; done ) & done`
- 
-### MySQL stuff
-MySQL database sizes (CPU intensive, prefer starting off your MySQL installations with innodb_file_per_table)
-`SELECT @schema := table_schema,  SUM(data_length+index_length)/1024/1024 AS total_mb FROM information_schema.tables GROUP BY table_schema ORDER BY 2;`
-
-MySQL table sizes:
-`SHOW TABLE STATUS order by 'Data_length';`
-
-MySQL which tables using InnoDB:
-`SELECT table_schema, table_name FROM INFORMATION_SCHEMA.TABLES WHERE engine = 'innodb';`
-
-MySQL kill thead:
-`SHOW PROCESSLIST;`
-`KILL 27;`
-
-Reset MySQL root password (from redhat docs)
-service mysqld stop
-/usr/bin/mysqld_safe --skip-grant-tables &
-mysql -u root mysql
-mysql> UPDATE user SET Password=PASSWORD('new_password') WHERE user='root';
-mysql> FLUSH PRIVILEGES;
-mysql> exit;
-mysqladmin -u root -pnew_password shutdown
-service mysqld start
- 
-### Scan for new LUNs without rebooting
-
-Instead of doing it manually...
-```
-echo "1" > /sys/class/fc_host/host/issue_lip
-# For every hostN:
-echo "- - -"  >  /sys/class/fc_host/hostX/device/scsi_host/hostX/scan #Fibre
-echo "- - -" > /sys/class/scsi_host/hostX/scan
-``` 
-...just `yum install sg3_utils` and run `rescan-scsi-bus.sh`.
-
-
-### RPM tips
-- Which RPM a file belongs to: `rpm -qf /etc/rsyslog.conf`
-- View RPM contents: `rpm -q --filesbypkg -p fiklename.rpm`
-- Unzip an RPM: `rpm2cpio bash-123.rpm | cpio -idmv`
-- List all files an installed package: `rpm -ql rsyslog`
-- List all files in an RPM: `rpm -qlp someapp.rpm`
-Note that you can't guess the effect an RPM can have on a system just based on it's files; you need to also find out the scripts it'd execute during the installation: `rpm -qp --scripts someapp.rpm` or as a trigger: `rpm -qp --triggers someapp.rpm`. If you don't like the look of the script, but you can still install an RPM bypassing the scripts with `rpm --noscripts -ivh someapps.rpm`
-- List all config file: `rpm -qc rsyslog`
-- List dependencies of an installed package: `rpm -qR bash`
-- List dependencies of an RPM: `rpm -qRp someapp.rpm`
-- Show info of an installed package: `rpm -qi screen`
-- Show info of an RPM: `rpm -qip someapp.rpm`
-- Verify GPG key (assuming you did an rpm --import): `rpm -K someapp.rpm`
-- Check if a file has been tampered: `rpm -Vf /usr/bin/bash`  or `rpm -V bash`
-- Check all files (very slow, prone to false positives): `rpm -Va`
- 
-### yum-security (RHEL only, not CentOS)
-- Summary of the number of security and bugfix updates: `yum updateinfo`
-- List of advisories with the packages affected: `yum updateinfo list`
-- Details of a Red Hat advisory: `yum updateinfo RHSA-2014:1293`
-- List all the updates needed to resolve a CVE: `yum updateinfo list --cve=CVE-2013-0775 `
-- List of security related updates: `yum --security list updates`
-- Huge ass list of all security update details: `yum info-sec`
-- Update security related packages only: `yum --security update`
-Note that doing a `yum --security update` would update an affected package to the latest one available in the repositories. As an example, say you have deo-1.3 installed, and there is a security vulnerability fixed in deo-1.4, and a bug fixed in deo-1.5, and a feature added in deo-1.6. A `yum --security update deo` would push your deo from 1.3 to 1.6. If, instead, you want to update to just the amount required to fix a bug, use update-minimal, which would update deo to 1.4 only:
-`yum update-minimal --security`
-- Update packages that fix a bugzilla ID: `yum --bz 1011219 update`
-- Update packages related to a Red Hat advisory: `yum update --advisory=RHSA-2014:0159`
-- Update only critical packages (not documented in the man page or red hat docs): `yum update --security --sec-severity=Critical`
-- Update only important packages (not documented in the man page or red hat docs): `yum update --security --sec-severity=Important`
-
-
-### Which processes are responsible for the load:
-Very few people I've met, even some those working in Red Hat support, realize how the load is calculated, with many thinking it's only based on the CPU usage, and some understanding that disk access is involved too somehow but aren't sure how the numbers work. Simplified, the load is just the average number of processes that are in a running (=CPU intensive), or uninterrupted sleep (=Waiting for I/O) state. So if you run this command several times:
-`ps -eo stat,pid,ppid,size,pcpu,user,args | grep '^D\|^R'`
-you can see that the number of processes excluding the ps process represents the load on the system, with 'R' meaning it's using up the CPU, and 'D' probably meaning it's using your disk, though in cases like a stuck NFS or GFS2 mountpoint, just mean that it's stuck in an uninterruptable sleep waiting for I/O. 
- 
- 
-### Hard soft-reboot a server having IO issues
-It's rare, and I don't know why it happened to me this often, but there are situations where you happen to have a terminal open on a very old test server, and it's RAID controller or I/O completely freezes up which could be fixed by a reboot, but you can't type it reboot or shutdown because that would need to read the disk to find those binaries. So to save you the trouble of accessing the IPMI, you could use this, which doesn't need to read the disk, to reboot:
-```
-echo 1 > /proc/sys/kernel/sysrq
-echo b > /proc/sysrq-trigger
-```
- 
-### Hang/freeze a system
-This is extremely useful, or even crucial, in cluster testing to simulate OS or system freezes
-`# echo c > /proc/sysrq-trigger # Freeze system`
-
- 
-### UNIX timestamps to normal time & back
-```
-date -d @1338636201
-date --date="Wed Aug 22 07:51:04 UTC 2007" +%s
-```
-
-
-### Encrypted block device
-`cryptsetup --verbose --verify-passphrase luksFormat /dev/vg_rhel6/LogEncrypted`
-`cryptsetup luksOpen /dev/vg_rhel6/LogEncrypted encrypted_stuff`
-`mkfs.ext4 -m 0 /dev/mapper/encrypted_stuff`
-**/etc/crypttab**
-```
-		encrypted_stuff /dev/vg_rhel6/LogEncrypted none
-```
-/etc/fstab:
-```
-		/dev/mapper/encrypted_stuff /mnt/encrypted      ext4    defaults        0 0
-```
-`cryptsetup luksClose encrypted_stuff`
- 
-### Rebuild initrd:
-
-RHEL 5: `cd /boot; mv initrd-2.6.18-238.5.1.el5.img initrd-2.6.18-238.5.1.el5.img.orig ; mkinitrd -f /boot/initrd-$(uname -r).img $(uname -r)`
-RHEL 5: `dracut -f /boot/initramfs-$(uname -r).img $(uname -r)`
-
-### Find the original MD5sum of a binary that was prelinked:
-`prelink -y --md5 /usr/bin/cifsiostat`
- 
-### Speed up ext3/ext4 filesystem at the expense of safety:
-FS Mount options: `defaults,noatime,data=writeback,barrier=0,nobh`
- 
  
 ### Make iptraf ignore SSH traffic
 
@@ -521,7 +521,7 @@ Just a test
 Then use the standard SMTP chat in the previous point.
  
 ### telnet POP3/IMAP with SSL
-`openssl s_client -connect sfcmail.sfcgroup.com:995 -crlf`
+`openssl s_client -connect mail.thedomain.com:995 -crlf`
 ```
 
 ### Zimbra stuff
