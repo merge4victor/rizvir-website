@@ -248,6 +248,68 @@ Assume /dev/sdb failed:
 	   quit
 ```
 
+### MD RAID expand volume
+
+Here's how I expanded a RAID5/RAID6 volume:
+
+```
+# Backup your data. Expanding RAID volumes stress the existing drives for a day or more
+
+# Add the drives physically 
+
+# Do a check of the existing drives/RAID just in case:
+echo check > /sys/block/md0/md/sync_action
+cat /sys/block/md0/md/mismatch_cnt # should be 0
+
+# Check the current situation, make sure all existing drives are active:
+cat /proc/mdstat
+mdadm --detail /dev/mdX
+
+# You can use and even write to the array as it's rebuilding
+# but if you can afford days of downtime on this RAID, you
+# can unmount the filesystem to be extra safe
+
+# Optionally partition your drives if you did so in your previous drives
+
+# Speed up rebuilding by increasing the stripe cache (uses some RAM)
+echo 32768 > /sys/block/md0/md/stripe_cache_size
+
+# Add new drives or partitions. You can add multiple drives to md RAIDs at a time.
+mdadm --add /dev/mdX /dev/sdX1
+mdadm --add /dev/mdX /dev/sdY1
+
+# You need to disable write-intent bitmap, if /proc/mdstat mentions 'bitmap:'
+mdadm --grow /dev/mdX --bitmap=none
+
+# You need to know the number of devices you want to end up with (the active devices in mdadm --detail /dev/md0
+# plus the number of new drives you are adding.
+# Keep the optional --backup file somewhere NOT in the RAID array in question (eg. on a USB or /boot)
+# This backup file will only be a few megabytes for a few seconds and is used in case the power fails during a critical stage.
+mdadm --grow --raid-devices=7 --backup-file=/root/mdadm-resize-backup /dev/md0
+
+# Watch the expansion and estimated time to finish with:
+cat /proc/mdstat
+
+# Don't forget to add the write-intent bitmap back on:
+mdadm --grow /dev/mdX --bitmap=internal
+
+# If MD is settled, it's time to expand the filesystem. If you use LVM, do a :
+pvresize /dev/mdX
+lvm vgs
+lvextend --size +1.23T /dev/yourVG/yourLV # or --extents 100%FREE
+
+# If you use volume encryption, open the volume with luksOpen and run:
+cryptsetup --verbose resize your_cryptname
+
+# Then finally resize the filesystem with
+# resize2fs -p /dev/...
+# or
+# mount ... && xfs_growfs /dev/...
+
+```
+
+
+
 ### MD RAID unwanted spare
 If you have an /proc/mdstat output similar to:
 ```
