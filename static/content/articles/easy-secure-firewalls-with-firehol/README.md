@@ -151,6 +151,8 @@ Of course, like iptables, this will only translate the hostname to an IP at star
 
 You might be tempted to just go through an online country IP list, convert it into a variable and do a "server accept ssh src "$COUNTRY" or something, but you may quickly discover that your firewall rule take more than 10 minutes to apply. iptables is just not efficient with a long list of IP networks. Use ipsets instead, it'd make the same thing apply almost instantly. 
 
+However, ipset support is only from **firehol version 3**, not firehol 1.x/2.x that is included in EPEL; so you may have to compile the latest firehol (and thus "iprange") from source for this to work unless EPEL updates firehol to 3.x+
+
 So after a `yum install ipset`, include something this function after `version`, but before the `interface` line:
 
 ```bash
