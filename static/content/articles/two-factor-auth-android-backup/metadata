@@ -1,0 +1,8 @@
+[metadata]
+title: Two factor authentication backup on Android
+author: Rizvi Rahim
+last_updated: 2016-06-19
+written_on: 2016-06-19
+distributions: Android
+description: You really should be using two factor authentication for your online accounts; a browser exploit or malware could get your passwords, and with two factor enabled, your password won't be useful to them. It's not as much of a hassle as it sounds because you will only be asked for a One Time Passcode (OTP) when logging in from a new device/browser. However, though two factor authentication is great, it stops being fun when you lose your phone. Though some like Google provide one-time recovery codes, many do not, resulting in possibly losing access to your account if your lose your phone. This article talks about backing up your OTP database on Android, so you can confidently enable two factor authentication without worrying about relying on one physical device forever.
+
