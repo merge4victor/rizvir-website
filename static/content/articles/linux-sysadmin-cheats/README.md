@@ -427,6 +427,32 @@ Cache might still be involved.
 ### Quickly benchmark single core encryption performance
 `openssl speed`
 
+### rsync over ssh chroot
+It's easy to set up an SFTP chroot, but not obvious what to do when you need rsync to work too. Here's a quick way to set it up for a secure transfer (assuming you have a recent version of SSHd that supports ChrootDirectory):
+Add this to /etc/ssh/sshd_config :
+```
+Match User rsyncuser
+   X11Forwarding no
+   AllowTcpForwarding no
+   ChrootDirectory /home/rsyncuser
+```
+Then set up the user and chroot:
+```
+USER=rsyncuser
+adduser $USER
+mkdir -p /home/$USER/{usr/bin,lib64,bin,share}
+chown root:root /home/$USER
+chown $USER:$USER /home/$USER/share
+cp -av /bin/bash /home/$USER/bin
+cp -av /usr/bin/rsync /home/$USER/usr/bin
+```
+Then either just copy/hardlink everything in /lib64 to /home/rsyncuser/lib64, or selectively copy (with cp -L) libraries that are actually used by bin/bash and usr/bin/rsync by using the output of ldd.
+
+Test it by SSHing into the box as $USER, and making sure bash works with no commands except rsync. You should then be able rsync as usual to /share:
+rsync -av  ./ rsyncuser@yourserver.com:/share
+
+
+
 
  
 ### Make iptraf ignore SSH traffic
