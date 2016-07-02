@@ -31,7 +31,7 @@ net.ipv4.tcp_tw_recycle=1
 ```
 
 ### Generate heat
-`for cpu in 1 2 3 4 5 6 7 8; do ( while true; do true; done ) & done`
+`for cpu in {1..8}; do ( while true; do true; done ) & done`
  
 ### MySQL stuff
 MySQL database sizes (CPU intensive, prefer starting off your MySQL installations with innodb_file_per_table)
