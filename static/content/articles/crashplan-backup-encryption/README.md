@@ -51,7 +51,9 @@ storage:/mnt/crashplan/etctest     /mnt/crashplan/etctest     nfs defaults,ro  0
 
 Do a `mkdir -p /mnt/crashplan/{conf,etctest}`, and mount them. Make sure it's accessible.
 
-Simply download Crashplan, and run it. It will download it's preferred Java version.
+Simply download Crashplan, and run it. It will download it's preferred Java version. 
+
+If your backup is going to be more than a terabyte, then Crashplan recommends you increase the java memory allocation from the default of 1GB to XGB, where X is the amount of terabytes you have (assuming you have enough RAM). You can do this by double clicking on the crashplan logo on the top right corner, and typing `java mx 2048, restart` . After some time, it should have restarted the crashplan service in the background, and you can try starting crashplan again.
 
 In Crashplan, select the /mnt/crashplan directories. 
 
