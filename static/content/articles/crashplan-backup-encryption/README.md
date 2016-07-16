@@ -8,11 +8,13 @@ yum install epel-release
 yum install fuse-encfs
 
 First do a test backup/restore so that you are confident of this working. Do a:
-`mkdir -p /mnt/crashplan/etctest`
-
-And then:
 ```
+`mkdir -p /mnt/crashplan/etctest
 cp -av etc/ /tmp/etctest
+```
+
+And then, assuming you want to backup /tmp/etctest:
+```
 encfs --reverse /tmp/etctest/ /mnt/crashplan/etctest/
 ```
 
