@@ -1,5 +1,4 @@
 /build
-/static/files/RizviRahim*
 *.pyc
 .sass-cache
 *.swp
