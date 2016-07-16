@@ -1,0 +1,7 @@
+[metadata]
+title: Encrypting CrashPlan backups in Linux
+author: Rizvi Rahim
+last_updated: 2016-05-16
+written_on: 2016-05-16
+distributions: CentOS_6+7
+description: CrashPlan is a fairly cost effective backup strategy for your personal files. However, since it's closed source, I'm extra paranoid about how it works, and though they say the data is encrypted, the closed source client still has unencrypted access to your data. This article goes through setting up a separate (virtual) machine dedicated for CrashPlan that only has access to an encrypted view of the data to back up.
