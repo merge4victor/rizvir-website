@@ -317,7 +317,7 @@
 						"    npm install \n",
 						"    ./node_modules/.bin/grunt \n",
 						"    echo 'Running sync:' \n",
-						"    aws s3 sync --region ",{"Ref":"AWS::Region"}," build/ s3://",{"Ref":"DomainName"},"/ \n",
+						"    aws s3 sync --size-only --region ",{"Ref":"AWS::Region"}," build/ s3://",{"Ref":"DomainName"},"/ \n",
 						"     \n",
 						"     \n",
 						"} >> /tmp/deployment_output 2>&1 \n",
