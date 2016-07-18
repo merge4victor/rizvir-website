@@ -1,9 +1,0 @@
-[metadata]
-title: Icinga email-ack: acknowledge alerts with expiry times by replying
-author: Rizvi Rahim
-last_updated: 2014-09-10
-written_on: 2013-04-23
-distributions: RHEL_6+7 CentOS_6+7
-url: https://github.com/rizvir/icinga-reply-with-ack-expiry
-description: If you use a monitoring system like Icinga, you probably get your alerts via email. You might have already thought about the possibility of acknowledging emails by just replying to them, and may have even implemented it, but this script goes a step further than that and allows you to add expiration times to your acknowledgements, which is important so that you don't have your team forget about acknowledged alerts. <br><br> So if you get an warning email about low disk space, you could just reply to the email with <code>Expire 21:00. Will free up space later.</code>
-
