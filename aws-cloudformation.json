@@ -286,10 +286,16 @@
 			"Properties": {
 				"Code": {
 					"ZipFile": { "Fn::Join": ["", [
-						"import boto3\n",
-						"import traceback\n",
-						"import sys\n",
 						"def deploy(event, context):\n",
+						"    import boto3\n",
+						"    import traceback\n",
+						"    import sys\n",
+						"    try: \n",
+						"        if not 'pusher' in event['Records'][0]['Sns']['MessageAttributes']: \n",
+						"            return \n",
+						"    except:  \n",
+						"        return  \n",
+						"\n",
 						"    sns = boto3.resource('sns')\n",
 						"    topic = sns.Topic('",{"Ref":"DeploymentNotification"},"')\n",
 						"    ec2 = boto3.resource('ec2', region_name='", {"Ref":"AWS::Region"}, "')\n",
@@ -316,8 +322,9 @@
 						"    pip install -r requirements.txt --user \n",
 						"    npm install \n",
 						"    ./node_modules/.bin/grunt \n",
+						"    ls -l build/index.html # sanity check \n",
 						"    echo 'Running sync:' \n",
-						"    aws s3 sync --size-only --region ",{"Ref":"AWS::Region"}," build/ s3://",{"Ref":"DomainName"},"/ \n",
+						"    aws s3 sync --size-only --delete --region ",{"Ref":"AWS::Region"}," build/ s3://",{"Ref":"DomainName"},"/ \n",
 						"     \n",
 						"     \n",
 						"} >> /tmp/deployment_output 2>&1 \n",
@@ -344,12 +351,61 @@
 						""
 					]]}
 				},
-				"Description": "Lamda function is called by SNS which in turn is called by Git. This just starts an instance that does the deployment",
+				"Description": "Lamda function is called by SNS which in turn is called by Git. This just starts an instance that does the deployment.",
 				"FunctionName": "StartWebsiteDeploymentInstance",
 				"Handler": "index.deploy",
 				"Role": {"Fn::GetAtt": ["SiteDeployerLambdaAccessRole", "Arn"] },
 				"Runtime": "python2.7",
 				"Timeout": "300"
+			}
+		},
+
+
+		"DeploymentTriggerTopic": {
+			"Type": "AWS::SNS::Topic",
+			"DependsOn": "SiteDeployerLamda",
+			"Metadata": {
+				"Comment": "This is an endpoint used by GitHub to trigger the deployment Lamda function"
+			},
+			"Properties": {
+				"DisplayName": {"Fn::Join": ["", [ {"Ref":"DomainName"}, " trigger-deploy"]]},
+				"TopicName": "TriggerWebsiteDeploy",
+				"Subscription" : [{
+					"Protocol": "lambda",
+					"Endpoint": {"Fn::GetAtt":["SiteDeployerLamda","Arn"]}
+				}]
+			}
+		},
+
+		"GitHubDeployUser" : {
+			"Type": "AWS::IAM::User",
+			"DependsOn": "DeploymentNotification",
+			"Metadata": {
+				"Comment": "A user used by GitHub that only has permissions to publish to DeploymentTriggerTopic"
+			},
+			"Properties": {
+				"Policies" : [{
+						"PolicyName": "PublishToDeploymentNotification",
+						"PolicyDocument": {
+							"Version" : "2012-10-17",
+							"Statement": [ {
+								"Effect": "Allow",
+								"Action": [
+									"sns:Publish"
+								],
+								"Resource": [ 
+									{"Ref":"DeploymentNotification"}
+								]
+							} ]
+						}
+				}]
+			}
+		},
+		"GitHubDeployAccessKey" : {
+			"Type": "AWS::IAM::AccessKey",
+			"DependsOn": "GitHubDeployUser",
+			"Properties": {
+				"UserName": {"Ref":"GitHubDeployUser"}
 			}
 		}
 
@@ -363,10 +419,19 @@
 			"Description": "The website URL for the S3 bucket",
 			"Value": {"Fn::GetAtt":["S3Website","WebsiteURL"]}
 		},
-		"DeploymentNotificationARN": {
-			"Description": "The ARN for the SNS topic for deployment notifications",
-			"Value": {"Ref":"DeploymentNotification"}
+		"GitHubDeploymentAccessKey": {
+			"Description": "The access key for the GitHub deployment",
+			"Value": {"Ref":"GitHubDeployAccessKey"}
+		},
+		"GitHubDeploymentSecret": {
+			"Description": "The secret key for the GitHub deployment",
+			"Value": {"Fn::GetAtt": [ "GitHubDeployAccessKey", "SecretAccessKey" ] }
+		},
+		"GitHubDeploymentTopic": {
+			"Description": "The SNS topic for the GitHub deployment",
+			"Value": {"Ref":"DeploymentTriggerTopic"}
 		}
+
 	}
 
 
