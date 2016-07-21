@@ -325,7 +325,7 @@
 						"    ./node_modules/.bin/grunt \n",
 						"    ls -l build/index.html # sanity check \n",
 						"    echo 'Running sync:' \n",
-						"    aws s3 sync --size-only --delete --region ",{"Ref":"AWS::Region"}," build/ s3://",{"Ref":"DomainName"},"/ \n",
+						"    aws s3 sync --cache-control max-age=86400 --delete --region ",{"Ref":"AWS::Region"}," build/ s3://",{"Ref":"DomainName"},"/ \n",
 						"     \n",
 						"     \n",
 						"} >> /tmp/deployment_output 2>&1 \n",
