@@ -287,15 +287,16 @@
 				"Code": {
 					"ZipFile": { "Fn::Join": ["", [
 						"def deploy(event, context):\n",
-						"    import boto3\n",
-						"    import traceback\n",
-						"    import sys\n",
 						"    try: \n",
-						"        if not 'pusher' in event['Records'][0]['Sns']['MessageAttributes']: \n",
+						"        if event['Records'][0]['Sns']['MessageAttributes']['X-Github-Event']['Value'] != 'push': \n",
 						"            return \n",
 						"    except:  \n",
 						"        return  \n",
 						"\n",
+						"\n",
+						"    import boto3\n",
+						"    import traceback\n",
+						"    import sys\n",
 						"    sns = boto3.resource('sns')\n",
 						"    topic = sns.Topic('",{"Ref":"DeploymentNotification"},"')\n",
 						"    ec2 = boto3.resource('ec2', region_name='", {"Ref":"AWS::Region"}, "')\n",
@@ -333,6 +334,9 @@
 						"trap '' EXIT \n",
 						"set +e \n",
 						"shutdown -h now \n",
+						" \n",
+						" \n",
+						" \n",
 						" \n",
 						"\"\"\"\n",
 						"    try:\n",
@@ -385,7 +389,7 @@
 			},
 			"Properties": {
 				"Policies" : [{
-						"PolicyName": "PublishToDeploymentNotification",
+						"PolicyName": "PublishToDeploymentTriggerTopic",
 						"PolicyDocument": {
 							"Version" : "2012-10-17",
 							"Statement": [ {
@@ -394,7 +398,7 @@
 									"sns:Publish"
 								],
 								"Resource": [ 
-									{"Ref":"DeploymentNotification"}
+									{"Ref":"DeploymentTriggerTopic"}
 								]
 							} ]
 						}
@@ -407,8 +411,22 @@
 			"Properties": {
 				"UserName": {"Ref":"GitHubDeployUser"}
 			}
-		}
+		},
 
+
+		"DeploymentTriggerTopicLambdaPermission": {
+			"Type": "AWS::Lambda::Permission",
+			"Metadata": {
+				"Comment": "Allow SNS to invoke the lambda function"
+			},
+			"DependsOn": "SiteDeployerLamda",
+			"Properties": {
+				"Action": "lambda:InvokeFunction",
+				"FunctionName": {"Fn::GetAtt":["SiteDeployerLamda","Arn"]},
+				"Principal": "sns.amazonaws.com",
+				"SourceArn": {"Ref":"DeploymentTriggerTopic"}
+			}
+		}
 
 	},
 
