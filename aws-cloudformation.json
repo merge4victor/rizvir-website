@@ -321,7 +321,7 @@
 						"    git clone https://github.com/rizvir/rizvir-website.git\n",
 						"    cd * \n",
 						"    pip install -r requirements.txt --user \n",
-						"    npm install \n",
+						"    npm install --silient\n",
 						"    ./node_modules/.bin/grunt \n",
 						"    ls -l build/index.html # sanity check \n",
 						"    echo 'Running sync:' \n",
