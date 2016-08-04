@@ -1,0 +1,7 @@
+[metadata]
+title: Web browser security - Running Firefox/Chrome as a different user
+author: Rizvi Rahim
+last_updated: 2016-06-17
+written_on: 2016-06-17
+distributions: Fedora Ubuntu RHEL_6+7 CentOS_6+7
+description: Consider this: you could have your SSH keys, personal files and password manager databases taken over right now; all it would take would be for you to just visit a website that has an exploit for your browser, and they can run anything you can; including overriding your shell commands with theirs. Add a layer of protection by running your browser as a different user; so that the single most vulnerable application that is directly exposed to the big bad internet doesn't have access to your files.
