@@ -19,10 +19,10 @@ Create a user that the browser would run under as (assuming ACLs is enabled in y
 useradd -s /sbin/nologin browser
 MAINUSER=rizvir
 BROWSERUSER=browser
-setfacl --modify "u:$MAINUSER:rwx" /home/$BROWSERUSER
-setfacl --modify "u:$BROWSERUSER:rwx" /home/$BROWSERUSER
-setfacl --default --modify "u:$MAINUSER:rwx" /home/$BROWSERUSER
-setfacl --default --modify "u:$BROWSERUSER:rwx" /home/$BROWSERUSER
+setfacl --recursive --modify "u:$MAINUSER:rwx" /home/$BROWSERUSER
+setfacl --recursive --modify "u:$BROWSERUSER:rwx" /home/$BROWSERUSER
+setfacl --recursive --default --modify "u:$MAINUSER:rwx" /home/$BROWSERUSER
+setfacl --recursive --default --modify "u:$BROWSERUSER:rwx" /home/$BROWSERUSER
 ```
 
 Add a sudo rule as root to allow your current user to run your browser as your user, by appending this using visudo (replace rizvi with your username):
