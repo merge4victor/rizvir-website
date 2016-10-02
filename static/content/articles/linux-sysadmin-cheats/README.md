@@ -529,7 +529,7 @@ SOURCE_PORT="993"
 DESTINATION_IP="127.0.0.1"
 DESTINATION_PORT="143"
 DESTINATION_ADMIN_USER="admin"
-DESTINATION_ADMIN_PASSWORD="***REMOVED***"
+DESTINATION_ADMIN_PASSWORD="xxx"
 
 if [[ "$USER" != *@* || -z "$PASSWORD" ]]; then
 		echo "Usage: imapsync_user.sh username@domain password"
