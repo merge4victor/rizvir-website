@@ -1,0 +1,7 @@
+[metadata]
+title: BitFenix Icon display on Linux
+author: Rizvi Rahim
+last_updated: 2016-10-08
+written_on: 2016-10-08
+distributions: Fedora
+description: If you have the BitFenix Pandora case, and use Linux, you might have been disappointed to find out there is literally no information on changing the ICON display image in Linux anywhere on the internet, but I managed to modify the BitFenix icon source code to get it working; so you no longer need to have Windows around to change the image.
