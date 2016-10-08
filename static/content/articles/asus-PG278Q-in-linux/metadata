@@ -1,0 +1,7 @@
+[metadata]
+title: Monitor setup: Asus PG279Q in Linux with Intel graphics
+author: Rizvi Rahim
+last_updated: 2016-10-08
+written_on: 2016-10-08
+distributions: Fedora
+description: I realize I may be in the minority having the Asus ROG Swift PG278Q gaming G-Sync monitor connected to Intel graphics on Linux, but if you happen to be in the same rare situation, here's how to get it to work in Linux.
