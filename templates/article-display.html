@@ -42,6 +42,8 @@
 							{% set label_color = "label-warning" %}
 						{% elif distro.startswith("SLES") %}
 							{% set label_color = "label-success" %}
+						{% elif distro.startswith("AWS") %}
+							{% set label_color = "label-warning" %}
 						{% else %}
 							{% set label_color = "label-default" %}
 						{% endif %}
