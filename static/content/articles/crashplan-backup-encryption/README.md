@@ -81,10 +81,3 @@ cd /mnt/decrypted
 ls
 ```
 
-
-
-#put details of automount/encrypted key at boot with systemctl
-
-
-
-
