@@ -4,8 +4,118 @@ This is not a tutorial (read the [CloudFormation::Init](http://docs.aws.amazon.c
 
 This is with the official CentOS7 AMI. You will have to replace mentions of 'SampleServer' below with the name of your resource. The example cfn configuration checks for changes to your template every 5 minutes.
 
+#### YAML:
+
+```yaml
+AWSTemplateFormatVersion: 2010-09-09
+Description: Sample template of cfn-init on CentOS 7, add your IP/rules to the security group
+
+Parameters:
+    VPC:
+        Description: VPC ID
+        Type: String
+
+    Subnet:
+        Description: Subnet ID
+        Type: String
+
+    AMI:
+        Description: AMI to use for the web server
+        Type: String
+        Default: ami-fedafc9d  # CentOS 7 HVM
+
+    InstanceType:
+        Description: Instance size to use for the web server
+        Type: String
+        Default: t2.micro
+
+    KeyPairName:
+        Description: SSH keypair to use
+        Type: String
+
+
+    ServerSecurityGroup:
+        Type: AWS::EC2::SecurityGroup
+        Properties:
+            GroupDescription: Server security group
+            VpcId: !Ref "VPC"
+            SecurityGroupIngress:
+                - IpProtocol: -1
+                  CidrIp: 1.2.3.4/32
+
+	# If you change the name of this Resource, modify the cfn-auto-reloader.conf 
+	# and UserData below with the updated name
+    Server:
+        Type: AWS::EC2::Instance
+        Metadata:
+            AWS::CloudFormation::Init:
+                configSets:
+                    default:
+                        - install_base
+                install_base:
+                    packages:
+                        yum: 
+						# Example packages:
+                            bash-completion: []
+                            telnet: []
+                            wget: []
+                    files:
+						# These files are needed for CloudFormation::Init to work
+                        /etc/cfn/cfn-hup.conf:
+                            content: !Sub |
+                                [main]
+                                stack=${AWS::StackId}
+                                region=${AWS::Region}
+                                interval=1
+                        /etc/cfn/hooks.d/cfn-auto-reloader.conf:
+                            content: !Sub |
+                                [cfn-auto-reloader-hook]
+                                triggers=post.update
+                                path=Resources.Server.Metadata.AWS::CloudFormation::Init
+                                action=/opt/aws/bin/cfn-init -v --stack ${AWS::StackId} --region ${AWS::Region} --resource Server
+                                runas=root
+                    services:
+                        sysvinit:
+                            cfn-hup:
+                                enabled: true
+                                ensureRunning: true
+        Properties:
+            ImageId: !Ref AMI
+            InstanceType: !Ref InstanceType
+            InstanceInitiatedShutdownBehavior: stop
+            KeyName: !Ref KeyPairName
+            BlockDeviceMappings: 
+                - DeviceName: /dev/sda1
+                  Ebs:
+                    VolumeSize: 8
+                    VolumeType: gp2
+            SecurityGroupIds: 
+                - !Ref ServerSecurityGroup
+            SubnetId: !Ref Subnet
+            Tags:
+                - Key: Name
+                  Value: sample-centos7-server
+            UserData: 
+                Fn::Base64: !Sub |
+                    #!/bin/bash
+                    yum install -y epel-release
+                    yum install -y awscli
+                    /usr/bin/easy_install --script-dir /opt/aws/bin https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz
+                    cp -v /usr/lib/python2*/site-packages/aws_cfn_bootstrap*/init/redhat/cfn-hup /etc/init.d
+                    chmod +x /etc/init.d/cfn-hup
+                    /opt/aws/bin/cfn-init --stack ${AWS::StackId} --resource Server --region ${AWS::Region}
+                    /opt/aws/bin/cfn-signal -e 0 --stack ${AWS::StackName} --resource Server --region ${AWS::Region}
+
+
+
+
+```
+
+JSON:
+
 ```json
 {
+	...
     "Mappings": {
         "AWSRegion2AMI" : {
             "ap-southeast-2": 	{ "AMI" : "ami-fedafc9d" },
