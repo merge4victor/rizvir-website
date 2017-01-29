@@ -1,0 +1,9 @@
+[metadata]
+title: AWS CloudWatch Nagios plugin
+author: Rizvi Rahim
+last_updated: 2017-01-10
+written_on: 2017-01-10
+distributions: RHEL_6+7 CentOS_6+7
+url: https://github.com/rizvir/check_cloudwatch_metrics
+description: This is a Nagios/Icinga plugin that queries your Amazon's CloudWatch metrics and compares them with your given thresholds. Why use this instead of CloudWatch Alarms? Well, other than not costing $0.10 per check after exceeding your free-tier, it allows you to retain your Nagios/Icinga/Centreon on-call and notification setup while still benefiting from CloudWatch metrics. 
+
