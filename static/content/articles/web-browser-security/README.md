@@ -69,7 +69,7 @@ You should now see pulseaudio listening on 127.0.0.1 if you do a `sudo netstat -
 Now to set it up for the browser user:
 ```bash
 sudo -u browser bash  # or, as root, su -m browser
-mkdir ~browser/.config/pulse
+mkdir -p ~browser/.config/pulse
 cat << EOF > ~browser/.config/pulse/client.conf
 autospawn = no
 default-server = tcp4:127.0.0.1
