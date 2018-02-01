@@ -1,11 +1,64 @@
 Before you get too excited, this isn't what you think it is; you can't just press the button on the Yubikey and have it enter the 6 digit token, because AWS and Paypal uses TOTP (Time-Based OTP), and the Yubikey does not have a battery to maintain an internal clock. However, how the Yubikey can be helpful is in having a secure portable write-only store of the TOTP secret, which can be used by the open source Yubikey Authenticator application installed on your desktop to generate a token.  You can get pretty close to nirvana by using Yubikey's desktop app combined with a script to type in the 6 digit token after pressing a keyboard shortcut. 
 
-
 <video preload="auto" autoplay="autoplay" loop="loop" style="width: 640px; height: 360px;">
     <source src="aws-yubikey.webm" type="video/webm"></source>
 </video>
 
-### Getting a token with a keyboard shortcut
+## Getting a token with a keyboard shortcut
+
+### Mac
+
+First, to make your life easier, install the Yubico Authenticator GUI:
+[https://www.yubico.com/support/knowledge-base/categories/articles/yubico-authenticator-download/](https://www.yubico.com/support/knowledge-base/categories/articles/yubico-authenticator-download/)
+
+Configure two factor authentication in whatever application you use (eg. for AWS, delete your old MFA virtual device, and create a new MFA virtual device, which would give you a QR code you can scan).
+
+Ensure your Mac's clock is accurate, and then use the QR Code scanner in the Yubico Authenticator to scan the AWS (or whatever) QR code that is displayed anywhere on the screen by going to File -> Scan QR Code. You may want to also add the QR code to your phone in whatever application you normally use. Use either the Yubico application or your phone to generate 6-digit code to set up two factor authentication as needed; both your phone and the Yubico Authenticator should be showing the same 6-digit codes.
+
+Then download the Yubikey Manager command line interface::
+```
+brew install yubikey-personalization ykman
+# Test it out:
+ykman oath list
+```
+
+It should show you a list of TOTP accounts configured in your yubikey. You can get a 6 digit code with something like 
+```
+ykman oath code --single AWS # replace AWS with some unique string in "ykman oath list"
+```
+
+We're almost there, since we can now generate a 6 digit code programmatically, all we need to do is use the OSX Automator to "type" that code when we press a keyboard shortcut.
+
+Start "Automater", and create a new Service:
+
+![Screenshot](mac_automator_service.png)
+
+Search for AppleScript:
+
+![Screenshot](mac_automator_search.png)
+
+Drag and drop the "Run AppleScript" text to the right side. In the top, select Service receives "no input". Then type in:
+```
+on run
+  tell application "System Events"
+    keystroke (do shell script "/usr/local/bin/ykman oath code --single AWS")
+    keystroke return
+  end tell
+end run
+```
+
+It should look something like this:
+
+![Screenshot](mac_automator_script.png)
+
+You can test it if you wish with the play icon (it should enter a 6 digit code).
+
+Save the workflow (File -> Save) with some name you can remember, then go to System Preferences -> Keyboard -> Shortcuts -> Services, look for your new service, and set a shortcut for it that does not conflict with an existing shortcut.
+
+Now, when you are prompted for an MFA token, just make sure your yubikey is plugged in, and press the shortcut.
+
+
+### Linux
 
 - Having an accurate clock is important for TOTP to work, so do have something like NTP/chrony running
 

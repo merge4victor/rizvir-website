@@ -1,8 +1,8 @@
 [metadata]
 title: Faster AWS/PayPal/TOTP two factor auth with Yubikey
 author: Rizvi Rahim
-last_updated: 2017-04-14
+last_updated: 2018-01-30
 written_on: 2017-10-14
-distributions: AWS Fedora Ubuntu
+distributions: AWS Fedora Ubuntu Mac
 description: Using two factor with AWS or Paypal is a very good idea. However, both these services have an annoyance compared to other providers who use two factor authentication: AWS and Paypal _always_ ask for your 6-digit token before you can log in, unlike say Google where it wouldn't ask for your OTP for the same device.  However, you can use a Yubikey to ease some of the pain, and have a shortcut enter the token when your Yubikey is plugged in.
 
