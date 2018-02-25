@@ -629,3 +629,12 @@ Move messages older than X date to a (created) folder called oldmail (it's limit
 `zmmailbox -z -m theuser@domain.com < /tmp/zmmailbox-move`
 
 
+### Save vim settings in files
+
+If you have different files that should have different vim settings (eg. different tab spaces), or if you want to make your colleagues have the same vim settings when editting a file, make sure you have `set modeline` in your ~/.vimrc , and then have something this at the end of files, using whatever comment character that is suitable for your file:
+
+```
+# vim: set expandtab ts=4 sw=4 softtabstop=4 smartindent:
+````
+
+
