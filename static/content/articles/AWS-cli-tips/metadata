@@ -1,0 +1,8 @@
+[metadata]
+title: AWS CLI tips
+author: Rizvi Rahim
+last_updated: 2017-02-25
+written_on: 2017-02-25
+distributions: AWS
+description: Some AWS CLI tips for interactive use, scripts, Ansible and Jenkins.
+
