@@ -293,11 +293,12 @@ This assumes the role $role_arn on the current shell, assuming the IAM instance 
 
 ### Assume role in a Jenkins Pipeline stage
 
-You can use this if you want to assume an AWS role in one of the Jenkins stages, and have that available in all other stages. The issue is that Jenkins does not pass exported environment variables from one stage into another, so we need to use a workaround that writes the variables into a file, and then uses some groovy to inject those variables as environment variables available for the rest of the stages:
+You can use this if you want to assume an AWS role in one of the Jenkinsfile stages, and have that available in all other stages. The issue is that Jenkins does not pass exported environment variables from one stage into another, so we need to use a workaround that writes the variables into a file, and then uses some groovy to inject those variables as environment variables available for the rest of the stages:
 
 
 ```
     environment {
+        region = "ap-southeast-2"
         aws_role = "arn:aws:iam::1234567889:role/YourRole"
     }
 
@@ -313,9 +314,9 @@ You can use this if you want to assume an AWS role in one of the Jenkins stages,
                         --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' \
                         --output text
                     ) )
-                    echo ${sts[0]} > .AWS_ACCESS_KEY_ID
-                    echo ${sts[1]} > .AWS_SECRET_ACCESS_KEY
-                    echo ${sts[2]} > .AWS_SESSION_TOKEN
+                    echo -n ${sts[0]} > .AWS_ACCESS_KEY_ID
+                    echo -n ${sts[1]} > .AWS_SECRET_ACCESS_KEY
+                    echo -n ${sts[2]} > .AWS_SESSION_TOKEN
                 '''
                 script {
                     env.AWS_ACCESS_KEY_ID = readFile('.AWS_ACCESS_KEY_ID')
