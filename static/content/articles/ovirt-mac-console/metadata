@@ -1,0 +1,7 @@
+[metadata]
+title: oVirt SPICE console from a Mac
+author: Rizvi Rahim
+last_updated: 2017-03-14
+written_on: 2017-03-14
+distributions: Mac oVirt
+description: Getting the "Console" button in oVirt working on a Mac
