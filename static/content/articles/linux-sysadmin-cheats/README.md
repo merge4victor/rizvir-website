@@ -22,6 +22,10 @@ iptables -t nat -A POSTROUTING -j MASQUERADE
 ### Find parent PID
 `ps -o user,pid,ppid,command -ax`
 
+### Allow multiple terminals to write to history
+Have this in your bashrc:
+`shopt -s histappend`
+
 ### Server stuck in TIME_WAIT all the time?
 
 ```
